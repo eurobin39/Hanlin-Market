@@ -2,23 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+    a {
+        @apply text-green-500;
+    }
 
-@layer base{
-    a{
-        @apply text-orange-500;
+    /* input[type='number']에 대한 화살표 제거 */
+    input[type='number']::-webkit-inner-spin-button,
+    input[type='number']::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    
+    input[type='number'] {
+        -moz-appearance: textfield;
     }
 }
 
 @layer utilities {
-    .text-bigger-hello{
-        @apply text 3xl font-semibold;
+    .text-bigger-hello {
+        @apply text-3xl font-semibold; 
     }
 }
 
-@layer components{
+@layer components {
     .primary-btn {
-    @apply w-full h-10 bg-orange-500 
-    text-white text-lg font-medium rounded-md text-center
-    hover:bg-orange-400 transition-colors;
+        @apply w-full h-10 bg-green-500 text-white text-lg font-medium rounded-md text-center hover:bg-green-400 transition-colors;
     }
 }

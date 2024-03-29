@@ -1,43 +1,53 @@
-import FormButton from "@/components/form-btn";
-import FormInput from "@/components/form-input";
+"use client";
+
+import Input from "@/components/input";
 import SocialLogin from "@/components/social-login";
+import { useFormState } from "react-dom";
+import { createAccount } from "./actions";
+import Button from "@/components/button";
+import Link from "next/link";
 
 
 export default function CreateAccount(){
+    const [state, action] = useFormState(createAccount, null);
+
 return(
 
     <div className="flex flex-col gap-10 py-8 px-6">
         <div className="flex flex-col gap-2 items-center justify-between *:font-medium">
-            <h1 className="text-2xl">HANLIN</h1>
+        <Link href="/Main"className="font-bold text-4xl">HANLIN</Link>
             <h2 className="text-xl">Fill in the form below to join!</h2>
         </div>
-        <form className="flex flex-col gap-3 px-10">
-            <FormInput 
-            name ="text"
+        <form action={action} className="flex flex-col gap-3 px-10">
+            <Input 
+            name ="username"
             required
             type="text"
             placeholder="Username"
-            errors ={[]}/>
-            <FormInput 
+            errors={state?.fieldErrors.username}
+            />
+            <Input 
             name ="email"
             required
             type="email"
             placeholder="Email"
-            errors ={[]}/>
-            <FormInput 
+            errors={state?.fieldErrors.email}
+            />
+            <Input 
             name ="password"
             required
             type="password"
             placeholder="Password"
-            errors ={[]}/>
-            <FormInput 
+            errors={state?.fieldErrors.password}
+            />
+            <Input 
             name ="confirmPassword"
             required
-            type="confirmPassword"
+            type="password"
             placeholder="confirm Password"
-            errors ={[]}/>
-            <FormButton
-                loading={false}
+            errors={state?.fieldErrors.confirmPassword}
+            />
+            <Button
                 text="Create Account" 
             />
         </form>
