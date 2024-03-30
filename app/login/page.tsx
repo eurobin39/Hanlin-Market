@@ -4,7 +4,6 @@ import FormButton from "@/components/button";
 import Input from "@/components/input";
 import SocialLogin from "@/components/social-login";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { useFormState } from "react-dom";
 import { login } from "./action"
 
