@@ -14,20 +14,23 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String   @unique
-  email     String?  @unique
+  id        Int        @id @default(autoincrement())
+  username  String     @unique
+  email     String?    @unique
   password  String?
-  phone     String?  @unique
-  github_id String?  @unique
+  phone     String?    @unique
+  github_id String?    @unique
   avatar    String?
-  createAt  DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createAt  DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  smsToken  smsToken[]
 }
 
 model smsToken {
   id        Int      @id @default(autoincrement())
   token     String   @unique
   createAt  DateTime @default(now())
-  updatedAt DateTime @updatedAt  
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
 }

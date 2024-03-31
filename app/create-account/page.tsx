@@ -15,7 +15,7 @@ return(
 
     <div className="flex flex-col gap-10 py-8 px-6">
         <div className="flex flex-col gap-2 items-center justify-between *:font-medium">
-        <Link href="/Main"className="font-bold text-4xl">HANLIN</Link>
+        <Link href="/"className="font-bold text-4xl">HANLIN</Link>
             <h2 className="text-xl">Fill in the form below to join!</h2>
         </div>
         <form action={action} className="flex flex-col gap-3 px-10">

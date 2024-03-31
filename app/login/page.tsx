@@ -13,7 +13,7 @@ export default function Login(){
 return(
     <div className="flex flex-col justify-between items-center gap-5 px-6 py-5">
         <div className="flex flex-col justify-between items-center gap-10 w-full px-10">
-            <Link href="/Main"className="font-bold text-4xl">HANLIN</Link>
+            <Link href="/"className="font-bold text-4xl">HANLIN</Link>
         <form action={action} className="flex flex-col gap-3 w-full">
             <Input 
             name ="email"
