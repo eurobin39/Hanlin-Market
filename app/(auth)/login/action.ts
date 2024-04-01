@@ -13,7 +13,7 @@ const checklEmailExists = async (email:string) => {
         select: { id:true, },
 
     });
-    return !Boolean(user);
+    return Boolean(user);
 }
 const formSchema = z.object(
     {
@@ -47,11 +47,12 @@ export async function login(prevState: any, formData: FormData) {
             const session = await getSession();
             session.id = user!.id;
             await session.save();
-            redirect("/profile");
+            console.log("connecting")
+            redirect("/products");
         }else{
             return{
                 fieldErrors: {
-                    password: ["wrong password0"],
+                    password: ["wrong password!"],
                     email: [],
                 }
             }

@@ -28,7 +28,7 @@ return(
             placeholder="Password"
             errors ={state.errors ?? []} />
              <FormButton
-                text="Login" />
+                text="Login"/>
         </form>    
         </div>
         <SocialLogin />
