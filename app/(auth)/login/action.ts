@@ -7,17 +7,21 @@ import bcrypt from "bcrypt";
 import getSession from "@/lib/session";
 import { redirect } from "next/navigation";
 
-const checklEmailExists = async (email:string) => {
+const checkEmailExists = async (email:string) => {
     const user = await db.user.findUnique({
-        where: { email, },
-        select: { id:true, },
-
+        where: { 
+            email, 
+        },
+        select: { 
+            id:true, 
+        },
     });
     return Boolean(user);
 }
+
 const formSchema = z.object(
     {
-        email:z.string().email().toLowerCase().refine(checklEmailExists, "This User Doesnt exist"),
+        email:z.string().email().toLowerCase().refine(checkEmailExists, "User does not exist"),
         password:z.string().min(10).regex(PASSWORD_REGEX, "password must have lowercase, UPPERCASE, number and special Character!"),
     }
 )
@@ -29,7 +33,9 @@ export async function login(prevState: any, formData: FormData) {
         email:formData.get("email"),
         password:formData.get("password"),
     }
-    const result = await formSchema.safeParseAsync(data);
+   
+    const result = await formSchema.spa(data);
+
     if(!result.success) {
         return result.error.flatten ();
     } else {

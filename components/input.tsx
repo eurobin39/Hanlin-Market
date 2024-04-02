@@ -13,7 +13,7 @@ export default function Input({name, errors=[], ...rest}: InputProps & InputHTML
             <input 
                 name={name}
                 className="bg-transparent rounded-md w-full h-10 focus:outline-none
-                 ring-1 focus:ring-2 ring-neutral-200 focus:ring-green-500 border-none
+                 ring-1 focus:ring-2 ring-neutral-200 focus:ring-emerald-500 border-none
                  placeholder:text-neutral-400 pl-3"
                  {...rest}
                  />

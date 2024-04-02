@@ -6,7 +6,9 @@
 
 generator client {
   provider = "prisma-client-js"
+  log      = ["query", "info", "warn", "error"]
 }
+
 
 datasource db {
   provider = "sqlite"
@@ -37,7 +39,7 @@ model smsToken {
 }
 
 model Product {
-  id Int @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   title       String
   price       Float
   photo       String
@@ -47,3 +49,4 @@ model Product {
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      Int
 }
+ 

@@ -14,7 +14,7 @@ import { usePathname } from "next/navigation"
 export default function TabBar() {
     const pathname = usePathname();
     return (
-        <div>
+        <div className="*:bg-gray-900">
             <div className="fixed bottom-0 w-full mx-auto max-w-screen-md 
             grid grid-cols-4 border-neutral-600
             border-t px-5 py-3">
@@ -47,9 +47,10 @@ export default function TabBar() {
                     <span>PROFILE</span>
                 </Link>
             </div>
-            <div className="fixed top-0 w-full mx-auto max-w-screen-lg flex items-center
-             justify-center border-t border-b border-neutral-600 px-5 py-3 relative">
-                {/* 왼쪽에 가상 요소 추가 */}
+            
+            <div className="fixed top-0 w-full mx-auto max-w-screen-md flex items-center
+             justify-center border-t border-b border-neutral-600 px-5 py-3 ">
+                
                 <div className="absolute left-5" style={{ width: '24px', height: '24px' }}></div>
                 <Link className="text-4xl font-bold" href="/products">
                     <span>HANLIN</span>
@@ -57,7 +58,8 @@ export default function TabBar() {
                 <Link className="absolute right-5" href="/profile">
                     <Bars3Icon className="w-7 h-7" />
                 </Link>
-            </div>
+            </div> 
+          
 
         </div>
 

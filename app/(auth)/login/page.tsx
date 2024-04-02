@@ -8,7 +8,7 @@ import { useFormState } from "react-dom";
 import { login } from "./action"
 
 export default function Login(){
-    const [state, action ] = useFormState(login, {prevValue:1}as any);
+    const [state, action ] = useFormState(login, null);
     
 return(
     <div className="flex flex-col justify-between items-center gap-5 px-6 py-5">
@@ -20,13 +20,13 @@ return(
             required
             type="email"
             placeholder="Email"
-            errors ={[]}/>
+            errors ={state?.fieldErrors.email}/>
             <Input
             name ="password"
             required
             type="password"
             placeholder="Password"
-            errors ={state.errors ?? []} />
+            errors ={state?.fieldErrors.password} />
              <FormButton
                 text="Login"/>
         </form>    
