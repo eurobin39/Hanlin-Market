@@ -15,7 +15,7 @@ export default function TabBar() {
     const pathname = usePathname();
     return (
         <div className="*:bg-gray-900">
-            <div className="fixed bottom-0 w-full mx-auto max-w-screen-md 
+            <div className="fixed bottom-0 w-full mx-auto max-w-screen-sm 
             grid grid-cols-4 border-neutral-600
             border-t px-5 py-3">
                 <Link className="flex flex-col  border-neutral-600
@@ -48,7 +48,7 @@ export default function TabBar() {
                 </Link>
             </div>
             
-            <div className="fixed top-0 w-full mx-auto max-w-screen-md flex items-center
+            <div className="fixed top-0 w-full mx-auto max-w-screen-sm flex items-center
              justify-center border-t border-b border-neutral-600 px-5 py-3 ">
                 
                 <div className="absolute left-5" style={{ width: '24px', height: '24px' }}></div>

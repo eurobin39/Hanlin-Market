@@ -15,7 +15,7 @@ export default function ListProduct({
 }: ListProductsProps) {
     return (
         <div className="py-2">
-            <Link href={`/products/${id}`} className="flex gap-5 border-b border-gray-600">
+            <Link href={`/products/${id}`} className="flex gap-5 border-b  w-full border-gray-600">
                 <div className="relative size-32 rounded-md overflow-hidden" >
                     <div>
                         <Image fill src={photo} alt={title}/>

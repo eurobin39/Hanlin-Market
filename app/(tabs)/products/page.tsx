@@ -19,7 +19,7 @@ export default async function Products() {
     const products = await getProducts();
     return (
         <div className="py-20">
-            <div>
+            <div className="max-w-screen-md w-full">
                 {products.map((product) => (<ListProduct key={product.id}
                     {...product} />))}
             </div>
