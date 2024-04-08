@@ -10,34 +10,39 @@ import { UserCircleIcon as UserOutline } from "@heroicons/react/24/outline"
 import { UserCircleIcon as UserSolid } from "@heroicons/react/24/solid"
 import { Bars3Icon } from "@heroicons/react/24/solid"
 import { usePathname } from "next/navigation"
+import { CurrencyEuroIcon as EuroOutline } from "@heroicons/react/24/outline"
+import { CurrencyEuroIcon as EuroSolid } from "@heroicons/react/24/solid"
 
 export default function TabBar() {
     const pathname = usePathname();
     return (
         <div className="*:bg-gray-900">
             <div className="fixed bottom-0 w-full mx-auto max-w-screen-sm 
-            grid grid-cols-4 border-neutral-600
+            grid grid-cols-5 border-neutral-600
             border-t px-5 py-3">
-                <Link className="flex flex-col  border-neutral-600
-            border-r items-center gap-px" href="/products">
+                <Link className="flex flex-col  items-center gap-px" href="/products">
                     {pathname === "/products" ? (
                         <HomeSolid className="w-7 h-7" />
                     ) : (<HomeOutline className="w-7 h-7" />)}
                     <span>HOME</span>
                 </Link>
-                <Link className="flex flex-col  border-neutral-600
-            border-r items-center gap-px" href="/community">
+                <Link className="flex flex-col  items-center gap-px" href="/community">
                     {pathname === "/community" ? (
                         <Clipsolid className="w-7 h-7" />
                     ) : (<ClipOutline className="w-7 h-7" />)}
                     <span>COMMUNITY</span>
                 </Link>
-                <Link className="flex flex-col  border-neutral-600
-            border-r items-center gap-px" href="/chats">
+                <Link className="flex flex-col  items-center gap-px" href="/chats">
                     {pathname === "/chats" ? (
                         <ChatSolid className="w-7 h-7" />
                     ) : (<ChatOutline className="w-7 h-7" />)}
                     <span>CHAT</span>
+                </Link>
+                <Link className="flex flex-col  items-center gap-px" href="/currency">
+                    {pathname === "/currency" ? (
+                        <EuroSolid className="w-7 h-7" />
+                    ) : (<EuroOutline className="w-7 h-7" />)}
+                    <span>TRADE</span>
                 </Link>
                 <Link className="flex flex-col  
              items-center gap-px" href="/profile">

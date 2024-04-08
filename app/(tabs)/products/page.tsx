@@ -1,7 +1,11 @@
 import db from "@/lib/db"
 import ListProduct from "@/components/list-products";
+import ProductList from "@/components/product-list";
+import { Prisma } from "@prisma/client";
+import Link from "next/link";
+import { PlusIcon } from "@heroicons/react/20/solid";
 
-export async function getProducts() {
+export async function getInitialProducts() {
     const products = await db.product.findMany({
         select: {
             title: true,
@@ -9,20 +13,30 @@ export async function getProducts() {
             created_At: true,
             photo: true,
             id: true,
+        },
+        take: 2,
+        orderBy: {
+            created_At: "desc",
         }
-
     });
     return products;
 }
 
+export type initialProducts = Prisma.PromiseReturnType<typeof getInitialProducts>;
+
 export default async function Products() {
-    const products = await getProducts();
+    const initialProducts = await getInitialProducts();
     return (
-        <div className="py-20">
-            <div className="max-w-screen-md w-full">
-                {products.map((product) => (<ListProduct key={product.id}
-                    {...product} />))}
+        <div >
+            <ProductList initialProducts={initialProducts} />
+            <div className="fixed bottom-32 w-full mx-auto max-w-screen-sm flex items-center
+             justify-centerpx-5 py-3">
+                <Link href="/products/add" className="bg-emerald-500 flex items-center justify-center
+            rounded-full size-16 absolute right-12 text-white transition-colors hover:bg-emerald-400 ">
+                    <PlusIcon className="size-10" />
+                </Link>
             </div>
+
         </div>
 
     )

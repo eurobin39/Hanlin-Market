@@ -18,7 +18,7 @@ export default function ListProduct({
             <Link href={`/products/${id}`} className="flex gap-5 border-b  w-full border-gray-600">
                 <div className="relative size-32 rounded-md overflow-hidden" >
                     <div>
-                        <Image fill src={photo} alt={title}/>
+                        <Image fill src={photo} className="object-cover" alt={title}/>
                     </div>
                 </div>
                 <div className="flex flex-col gap-1 *:text-white">

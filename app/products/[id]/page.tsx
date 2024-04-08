@@ -48,7 +48,7 @@ export default async function productDetail({ params
         <div>
            
             <div className="relative aspect-square">
-                <Image fill src={product.photo} alt={product.title} />
+                <Image fill src={product.photo} className="object-cover" alt={product.title} />
                 <div className="absolute top-5 left-5 z-50 flex items-center justify-center p-2 text-gray-700 bg-white rounded-full shadow-md hover:bg-gray-100">
                     <Link href="/products">
                         <ChevronLeftIcon className="h-5 w-5 text-neutral-600" />
