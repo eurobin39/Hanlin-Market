@@ -54,7 +54,7 @@ export async function login(prevState: any, formData: FormData) {
             session.id = user!.id;
             await session.save();
             console.log("connecting")
-            redirect("/products");
+            redirect("/home");
         }else{
             return{
                 fieldErrors: {

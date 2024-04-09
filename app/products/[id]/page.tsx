@@ -1,3 +1,4 @@
+
 import { notFound } from "next/navigation";
 import db from "@/lib/db";
 import getSession from "@/lib/session";
@@ -7,6 +8,7 @@ import Image from "next/image";
 import { formatToWon } from "@/lib/utils";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { NextApiRequest, NextApiResponse } from "next";
 
 async function getIsOwner(userId: number) {
     const session = await getSession();
@@ -15,9 +17,11 @@ async function getIsOwner(userId: number) {
     }
 }
 
-async function getProuct(id: number) {
+async function getProduct(id: number) {
     const product = await db.product.findUnique({
-        where: { id, },
+        where: { 
+            id,
+        },
         include: {
             user: {
                 select: {
@@ -30,13 +34,14 @@ async function getProuct(id: number) {
     return product;
 };
 
+
 export default async function productDetail({ params
 }: {
     params: { id: string };
 }
 ) {
     const id = Number(params.id);
-    const product = await getProuct(id);
+    const product = await getProduct(id);
     if (isNaN(id)) {
         return notFound();
     }
@@ -48,9 +53,9 @@ export default async function productDetail({ params
         <div>
            
             <div className="relative aspect-square">
-                <Image fill src={product.photo} className="object-cover" alt={product.title} />
+                <Image fill src={`${product.photo}/public`} className="object-cover" alt={product.title} />
                 <div className="absolute top-5 left-5 z-50 flex items-center justify-center p-2 text-gray-700 bg-white rounded-full shadow-md hover:bg-gray-100">
-                    <Link href="/products">
+                    <Link href="/home">
                         <ChevronLeftIcon className="h-5 w-5 text-neutral-600" />
                     </Link>
                 </div>

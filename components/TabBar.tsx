@@ -20,8 +20,8 @@ export default function TabBar() {
             <div className="fixed bottom-0 w-full mx-auto max-w-screen-sm 
             grid grid-cols-5 border-neutral-600
             border-t px-5 py-3">
-                <Link className="flex flex-col  items-center gap-px" href="/products">
-                    {pathname === "/products" ? (
+                <Link className="flex flex-col  items-center gap-px" href="/home">
+                    {pathname === "/home" ? (
                         <HomeSolid className="w-7 h-7" />
                     ) : (<HomeOutline className="w-7 h-7" />)}
                     <span>HOME</span>
@@ -57,7 +57,7 @@ export default function TabBar() {
              justify-center border-t border-b border-neutral-600 px-5 py-3 ">
                 
                 <div className="absolute left-5" style={{ width: '24px', height: '24px' }}></div>
-                <Link className="text-4xl font-bold" href="/products">
+                <Link className="text-4xl font-bold" href="/home">
                     <span>HANLIN</span>
                 </Link>
                 <Link className="absolute right-5" href="/profile">

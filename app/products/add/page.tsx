@@ -4,36 +4,62 @@ import Button from "@/components/button";
 import Input from "@/components/input";
 import { PhotoIcon } from "@heroicons/react/20/solid";
 import React, { useState } from "react";
-import { uploadProduct } from "./actions";
+import { getUploadUrl, uploadProduct } from "./actions";
 import { useFormState } from "react-dom";
 
 export default function AddProduct() {
     const [preview, setPreview] = useState("");
-    const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const [uploadUrl, setUploadUrl] = useState("");
+    const [imageId, setImageId] = useState("");
+    const onImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const { target: { files } } = event;
-        if (!files || files.length === 0) {
+        if (!files ) {
             return;
         }
         const file = files[0];
-        
-        // 파일 타입 확인
-        if (!file.type.startsWith('image/')) {
-            alert('Please select an image file.');
-            return;
-        }
-    
-        // 파일 크기 확인 (2MB 이하)
+
+        /* // 파일 크기 확인 (2MB 이하)
         if (file.size > 2 * 1024 * 1024) {
             alert('The file size should be 2MB or less.');
             return;
         }
-    
+        */
+
         // 파일이 이미지이고, 크기가 2MB 이하인 경우 미리보기 설정
+
         const url = URL.createObjectURL(file);
         setPreview(url);
+        const { success , result } = await getUploadUrl();
+        if (success) {
+            const { id, uploadURL } = result;
+            setUploadUrl(uploadURL);
+            setImageId(id);
+        }
+
     };
-    const [state, action] = useFormState(uploadProduct, null)
-    
+    const interceptAction = async (_: any, formData: FormData) => {
+        const file = formData.get("photo");
+        if (!file) {
+            return;
+        }
+        const cloudflareForm = new FormData();
+        cloudflareForm.append("file", file);
+        const response = await fetch(uploadUrl, {
+            method: "POST",
+            body: cloudflareForm,
+        });
+        console.log(await response.text());
+        if (response.status !== 200) {
+            alert('Something Goes Wrong!');
+            return;
+        }
+        const photoUrl = `https://imagedelivery.net/OQw6SyHmncm3MEfwgepYnw/${imageId}`
+        formData.set("photo", photoUrl);
+        return uploadProduct(_, formData);
+    };
+
+    const [state, action] = useFormState(interceptAction, null);
+
     return (
         <div>
             <form action={action} className="flex flex-col gap-5">
@@ -52,7 +78,7 @@ export default function AddProduct() {
                 <input onChange={onImageChange} type="file" id="photo" name="photo" accept="image/*" className="hidden" />
                 <Input name="title" required placeholder="Title" type="text" errors={state?.fieldErrors.title} />
                 <Input name="price" required placeholder="Price" type="number" errors={state?.fieldErrors.price} />
-                <Input name="description" required placeholder="Description" type="text" errors={state?.fieldErrors.description}/>
+                <Input name="description" required placeholder="Description" type="text" errors={state?.fieldErrors.description} />
                 <Button text="Upload" />
             </form>
         </div>

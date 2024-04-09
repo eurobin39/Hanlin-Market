@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import ListProduct from "./list-products";
-import { initialProducts } from "@/app/(tabs)/products/page";
-import { getMoreProducts } from "@/app/(tabs)/products/actions";
+import { initialProducts } from "@/app/(tabs)/home/page";
+import { getMoreProducts } from "@/app/(tabs)/home/actions";
 
 interface ProductListProps {
     initialProducts: initialProducts;
@@ -52,7 +52,7 @@ export default function ProductList({ initialProducts }: ProductListProps) {
     const onLoadMoreClick = async () => {}
     return (
         <div className="py-20">
-            <div className="p-5 flex flex-col gap-5">
+            <div className="p-2 flex flex-col gap-5">
                 {products.map((product) => (<ListProduct key={product.id}
                     {...product} />))}
                 <span
