@@ -2,7 +2,8 @@
 
 import db from "@/lib/db";
 
-export async function getMoreProducts(page:number){
+export async function getMoreProducts(page: number) {
+    
     const products = await db.product.findMany({
         select: {
             title: true,
@@ -11,10 +12,10 @@ export async function getMoreProducts(page:number){
             photo: true,
             id: true,
         },
-        skip: page*5,
-        take: 5,
-        orderBy:{
-            created_At:"desc",
+        skip: page * 1, 
+        take: 1,
+        orderBy: {
+            created_At: "desc",
         }
     });
     return products;

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import getSession from "./lib/session";
-import { redirect } from "next/dist/server/api-utils";
 
 interface Routes {
     [key: string]:boolean;

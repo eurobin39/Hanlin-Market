@@ -62,7 +62,7 @@ export async function uploadProduct(_: any, formData: FormData) {
                     id: true,
                 }
             });
-            redirect(`/home/${product.id}`)
+            redirect(`/products/${product.id}`)
             //redirect("/products")
         }
     }

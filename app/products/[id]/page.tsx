@@ -8,14 +8,13 @@ import Image from "next/image";
 import { formatToWon } from "@/lib/utils";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
-import { NextApiRequest, NextApiResponse } from "next";
+import ProductDeleteButton from "./delete.button";
 
 async function getIsOwner(userId: number) {
     const session = await getSession();
-    if (session.id) {
-        return session.id === userId;
-    }
+    return session.id ? session.id === userId : false;
 }
+
 
 async function getProduct(id: number) {
     const product = await db.product.findUnique({
@@ -35,21 +34,27 @@ async function getProduct(id: number) {
 };
 
 
+
 export default async function productDetail({ params
 }: {
     params: { id: string };
 }
 ) {
     const id = Number(params.id);
-    const product = await getProduct(id);
+
     if (isNaN(id)) {
         return notFound();
     }
+    const product = await getProduct(id);
     if (!product) {
         return notFound();
     }
-    const isOwner = await getIsOwner(product.userId);
+    const isOwner = await getIsOwner(product.userId); // 실제 구조에 맞게 조정
+
+   
+    
     return (
+       
         <div>
            
             <div className="relative aspect-square">
@@ -83,7 +88,7 @@ export default async function productDetail({ params
             </div>
             <div className="fixed mx-auto w-full max-w-screen-sm bottom-0 p-5 pb-5 bg-neutral-800 flex justify-between items-center">
                 <span className="font-semibold text-lg">€{formatToWon(product.price)}</span>
-                {isOwner ? <button className="bg-emerald-400 px-5 py-2.5 rounded-md text-white font-semibold">Delete Product</button> : null}
+                {isOwner ? <ProductDeleteButton productId={product.id}/>: null}
                 <Link className="bg-emerald-400 px-5 py-2.5 rounded-md text-white font-semibold" href={''}>Chat</Link>
             </div>
 
