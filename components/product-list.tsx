@@ -52,14 +52,11 @@ export default function ProductList({ initialProducts }: ProductListProps) {
             <div className="p-2 flex flex-col gap-5">
                 {products.map((product) => (<ListProduct key={product.id}
                     {...product} />))}
-                <span
+                    {!isLastPage ? ( <span
                     ref={trigger}
-                    style={{
-                        marginTop : `${page + 1 * 100}vh`,
-                    }}
                     className="mb-30 text-sm font-semibold bg-emerald-400 w-fit mx-auto px-3 py-2 rounded-md hover:placeholder-opacity-90 active:scale-95">
                     {isLoading ? "Loading" : "Load More"}
-                </span>
+                </span>) : null}   
             </div>
         </div>
     )
