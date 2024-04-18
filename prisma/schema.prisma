@@ -56,7 +56,7 @@ model ChatRoom {
   id         String    @id @default(cuid())
   users      User[]
   productId  Int
-  product    Product   @relation(fields: [productId], references: [id])
+  product    Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
   created_At DateTime  @default(now())
   updated_At DateTime  @updatedAt
   messages   Message[]
@@ -65,8 +65,8 @@ model ChatRoom {
 model Message {
   id         Int      @id @default(autoincrement())
   payload    String
-  room       ChatRoom @relation(fields: [chatRoomId], references: [id])
-  user       User     @relation(fields: [userId], references: [id])
+  room       ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade )
   userId     Int
   chatRoomId String
   created_At DateTime @default(now())

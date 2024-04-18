@@ -12,9 +12,9 @@ export default function ChatTypeButton() {
 
     return (
         /* ${toSellClicked ? 'bg-green-900' : 'bg-gray-900'} ${toBuyClicked ? 'bg-orange-900' : 'bg-gray-900'} use for backgournd change */
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col">
 
-            <div className="pt-20 pb-20 px-4 container mx-auto max-w-screen-sm">
+            <div className="pt-20 pb-5 px-4 container mx-auto max-w-screen-sm">
                 <div className="grid grid-cols-2 gap-4">
                     <Link
                         href="/chats/toBuyChats"
@@ -33,9 +33,7 @@ export default function ChatTypeButton() {
                     </Link>
                 </div>
             </div>
-
-            {/* 상단과 하단 마진을 유지하며, 이 부분은 배경색 변경에서 제외됩니다. */}
-            <div className="flex-1"></div>
+            
         </div>
     );
 }

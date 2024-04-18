@@ -8,17 +8,18 @@ interface ChatListProductsProps {
     created_At: Date;
     photo: string;
     id: number;
-
+    chatRoomId: string;
+    
 }
 
 export default function ChatListProduct({
-    title, price, created_At, photo, id,
+    title, price, created_At, photo, chatRoomId,
 }: ChatListProductsProps) {
-    //console.log({ id, title, price, photo, created_At });
+    //console.log({ chatRoomId });
     return (
         
         <div>
-            <Link href={`/chats/${id}`} className="flex gap-5 border-b pb-5  w-full border-gray-600">
+            <Link href={`/chats/${chatRoomId}`} className="flex gap-5 border-b pb-5 w-full border-gray-600">
                 <div className="relative size-32 rounded-md overflow-hidden" >
                     <div>
                         <Image

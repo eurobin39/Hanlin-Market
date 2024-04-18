@@ -1,3 +1,5 @@
+
+
 import ChatMessagesList from "@/components/chat-messages-list";
 import db from "@/lib/db";
 import getSession from "@/lib/session";
@@ -5,25 +7,36 @@ import { Prisma } from "@prisma/client";
 import { notFound } from "next/navigation";
 
 async function getRoom(id: string) {
-  const room = await db.chatRoom.findUnique({
-    where: {
-      id,
-    },
-    include: {
-      users: {
-        select: { id: true },
+  try{
+    const room = await db.chatRoom.findUnique({
+      where: {
+        id,
       },
-    },
-  });
-  if (room) {
-    const session = await getSession();
-    const canSee = Boolean(room.users.find((user) => user.id === session.id!));
-    if (!canSee) {
-      return null;
+      include: {
+        users: {
+          select: { id: true },
+        },
+        product: { // 채팅방과 관련된 상품 정보도 함께 조회
+          select: { userId: true }, // 상품의 소유자(판매자) ID
+        },
+      },
+    });
+    if (room) {
+      const session = await getSession();
+      const isParticipant = Boolean(room.users.find((user) => user.id === session.id));
+      const isSeller = room.product?.userId === session.id; // 현재 사용자가 판매자인지 확인
+      if (!isParticipant && !isSeller) {
+        return null; // 참여자도 아니고 판매자도 아니면 null 반환
+      }
     }
+    return room;
+  }catch(e){
+    console.error("getRoom Function Error", e);
+    throw e;
   }
-  return room;
+  
 }
+
 
 async function getMessages(chatRoomId: string) {
   const messages = await db.message.findMany({

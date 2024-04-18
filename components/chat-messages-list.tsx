@@ -10,8 +10,8 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 const SUPABASE_PUBLIC_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJmaHZzbHpsbnp6eXRmd21jd3dzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTE1MzIwMDYsImV4cCI6MjAyNzEwODAwNn0.6_CBGkLSb8hl06prsZkzsUrf98pjwcwgXgqeFLNiXL0";
-const SUPABASE_URL = "https://bfhvslzlnzzytfwmcwws.supabase.co";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVraW91aHBwZ3htZWF2Y3NzaXNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTMxNjEwMDIsImV4cCI6MjAyODczNzAwMn0.uFyOaQF2B4B7QlsTkmuqozorjqDmqaMfm7xINdfR_0c";
+const SUPABASE_URL = "https://ukiouhppgxmeavcssisj.supabase.co";
 
 interface ChatMessageListProps {
   initialMessages: InitialChatMessages;
@@ -36,41 +36,41 @@ export default function ChatMessagesList({
     } = event;
     setMessage(value);
   };
+
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-  
-    // 새로운 메시지 객체 생성
-    const newMessage = {
-      id: Date.now(),
-      payload: message,
-      created_At: new Date(),
-      userId,
-      user: {
-        username,
-        avatar,
+    setMessages((prevMsgs) => [
+      ...prevMsgs,
+      {
+        id: Date.now(),
+        payload: message,
+        created_At: new Date(),
+        userId,
+        user: {
+          username: "string",
+          avatar: "xxx",
+        },
       },
-    };
-  
-    // 상태 업데이트 함수에 콜백 전달하여 상태 업데이트
-    setMessages(prevMsgs => [...prevMsgs, newMessage]);
-  
-    // Supabase의 Realtime Channel을 통해 메시지 전송
+    ]);
     channel.current?.send({
       type: "broadcast",
       event: "message",
-      payload: newMessage,
+      payload: {
+        id: Date.now(),
+        payload: message,
+        created_at: new Date(),
+        userId,
+        user: {
+          username,
+          avatar,
+        },
+      },
     });
-  
-    // 메시지 저장
     await saveMessage(message, chatRoomId);
-  
-    // 입력 필드 초기화
     setMessage("");
   };
-  
-  // useEffect 내부 구독 로직은 변경 없음
-  
-  
+
+
   useEffect(() => {
     const client = createClient(SUPABASE_URL, SUPABASE_PUBLIC_KEY);
     channel.current = client.channel(`room-${chatRoomId}`);
@@ -83,44 +83,45 @@ export default function ChatMessagesList({
       channel.current?.unsubscribe();
     };
   }, [chatRoomId]);
-  
+
+
   return (
-    <div className="p-5 flex flex-col gap-5 min-h-screen justify-end">
-      {messages.map((message) => (
-        <div
-          key={message.id}
-          className={`flex gap-2 items-start ${
-            message.userId === userId ? "justify-end" : ""
-          }`}
-        >
-          {message.userId === userId ? null : (
-            <Image
-              src={message.user.avatar!}
-              alt={message.user.username}
-              width={50}
-              height={50}
-              className="size-8 rounded-full"
-            />
-          )}
+    <div className="flex flex-col h-screen">
+      <div className="flex-1 overflow-y-auto p-5">
+        {messages.map((message) => (
           <div
-            className={`flex flex-col gap-1 ${
-              message.userId === userId ? "items-end" : ""
-            }`}
+            key={message.id}
+            className={`flex gap-2 items-center ${message.userId === userId ? "justify-end" : ""
+              }`}
           >
-            <span
-              className={`${
-                message.userId === userId ? "bg-neutral-500" : "bg-orange-500"
-              } p-2.5 rounded-md`}
+            {message.userId === userId ? null : (
+              <Image
+                src={message.user.avatar || '/default-avatar.jpg'} // 유저의 아바타가 있으면 사용하고, 없으면 기본 이미지 사용
+                alt={message.user.username}
+                width={50}
+                height={50}
+                className="size-8 rounded-full"
+              />
+
+            )}
+            <div
+              className={`flex flex-col gap-1 ${message.userId === userId ? "items-end" : ""
+                }`}
             >
-              {message.payload}
-            </span>
-            <span className="text-xs">
-              {formatToTimeAgo(message.created_At.toString())}
-            </span>
+              <span
+                className={`${message.userId === userId ? "bg-neutral-500" : "bg-orange-500"
+                  } p-2.5 rounded-md`}
+              >
+                {message.payload}
+              </span>
+              <span className="text-xs">
+                {formatToTimeAgo(message.created_At?.toString())}
+              </span>
+            </div>
           </div>
-        </div>
-      ))}
-      <form className="flex relative" onSubmit={onSubmit}>
+        ))}
+      </div>
+      <form className="sticky bottom-0 bg-gray-900 p-4" onSubmit={onSubmit}>
         <input
           required
           onChange={onChange}
@@ -130,7 +131,7 @@ export default function ChatMessagesList({
           name="message"
           placeholder="Write a message..."
         />
-        <button className="absolute right-0">
+        <button className="absolute right-4">
           <ArrowUpCircleIcon className="size-10 text-orange-500 transition-colors hover:text-orange-300" />
         </button>
       </form>
