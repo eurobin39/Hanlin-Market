@@ -100,7 +100,7 @@ export default async function Products() {
 
     return (
 
-        <div>
+        <div className="mb-20">
             <ChatTypeButton />
             <ChatProductList initialChatProducts={chatProductsWithRoomIds} />
         </div>

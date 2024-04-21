@@ -1,0 +1,52 @@
+import Link from "next/link";
+import Image from "next/image";
+import { formatToTimeAgo, formatToWon } from "@/lib/utils";
+import { ChevronLeftIcon } from "@heroicons/react/20/solid";
+import ChatDeleteButton from "@/app/chats/[id]/chatRoomDeleteButton";
+
+interface ChatListSumProductsProps {
+    title: string;
+    price: number;
+    photo: string;
+    id: number;
+    chatroomId: string;
+
+}
+
+export default function ProductSummarize({
+    title, price, photo, id, chatroomId
+}: ChatListSumProductsProps) {
+
+    return (
+
+        <div className="flex gap-3 items-center border-b p-2 w-full border-gray-600">
+            <Link href={`/chats/select-room/${id}`}
+                className="flex items-center justify-center h-10 w-10 rounded-full">
+                <ChevronLeftIcon className="size-12 text-gray-600" />
+
+            </Link>
+
+            <Link href={`/products/${id}`} className="flex gap-5 p-2 w-full border-gray-600">
+                <div className="relative size-16 rounded-md overflow-hidden" >
+                    <div>
+                        <Image
+                            fill
+                            src={`${photo}/avatar`}
+                            className="object-cover"
+                            alt={title}
+                        />
+                    </div>
+                </div>
+                <div className="flex flex-col justify-center gap-1 *:text-white">
+                    <span className="font-bold">{title}</span>
+                    <span>€{formatToWon(price)}</span>
+                </div>
+
+
+            </Link>
+            <ChatDeleteButton chatId={chatroomId} />
+
+        </div>
+
+    )
+}

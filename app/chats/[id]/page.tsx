@@ -1,13 +1,14 @@
 
 
 import ChatMessagesList from "@/components/chat-messages-list";
+import ProductSummarize from "@/components/product-Summarize";
 import db from "@/lib/db";
 import getSession from "@/lib/session";
 import { Prisma } from "@prisma/client";
 import { notFound } from "next/navigation";
 
 async function getRoom(id: string) {
-  try{
+  try {
     const room = await db.chatRoom.findUnique({
       where: {
         id,
@@ -17,7 +18,13 @@ async function getRoom(id: string) {
           select: { id: true },
         },
         product: { // 채팅방과 관련된 상품 정보도 함께 조회
-          select: { userId: true }, // 상품의 소유자(판매자) ID
+          select: {
+            id: true,
+            userId: true,
+            title: true,
+            price: true,
+            photo: true,
+          }, // 상품의 소유자(판매자) ID, title, Price, photo
         },
       },
     });
@@ -30,11 +37,11 @@ async function getRoom(id: string) {
       }
     }
     return room;
-  }catch(e){
+  } catch (e) {
     console.error("getRoom Function Error", e);
     throw e;
   }
-  
+
 }
 
 
@@ -86,13 +93,23 @@ export default async function ChatRoom({ params }: { params: { id: string } }) {
   if (!user) {
     return notFound();
   }
+
   return (
-    <ChatMessagesList
-      chatRoomId={params.id}
-      userId={session.id!}
-      username={user.username}
-      avatar={user.avatar!}
-      initialMessages={initialMessages}
-    />
+    <>
+      <ProductSummarize
+        id={room.product.id}
+        price={room.product.price}
+        title={room.product.title}
+        photo={room.product.photo}
+        chatroomId={params.id}
+      />
+      <ChatMessagesList
+        chatRoomId={params.id}
+        userId={session.id!}
+        username={user.username}
+        avatar={user.avatar!}
+        initialMessages={initialMessages}
+      />
+    </>
   );
 }

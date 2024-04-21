@@ -33,7 +33,7 @@ export default async function Products() {
              justify-centerpx-5 py-3">
                 <Link href="/products/add" className="bg-emerald-500 flex items-center justify-center
             rounded-full size-16 absolute right-12 text-white transition-colors hover:bg-emerald-400 ">
-                    <PlusIcon className="size-10" />
+                <PlusIcon className="size-10" />
                 </Link>
             </div>
 

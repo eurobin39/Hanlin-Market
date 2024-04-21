@@ -12,7 +12,6 @@ import { useEffect, useRef, useState } from "react";
 const SUPABASE_PUBLIC_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVraW91aHBwZ3htZWF2Y3NzaXNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTMxNjEwMDIsImV4cCI6MjAyODczNzAwMn0.uFyOaQF2B4B7QlsTkmuqozorjqDmqaMfm7xINdfR_0c";
 const SUPABASE_URL = "https://ukiouhppgxmeavcssisj.supabase.co";
-
 interface ChatMessageListProps {
   initialMessages: InitialChatMessages;
   userId: number;
@@ -20,6 +19,7 @@ interface ChatMessageListProps {
   username: string;
   avatar: string;
 }
+
 export default function ChatMessagesList({
   initialMessages,
   userId,
@@ -30,46 +30,43 @@ export default function ChatMessagesList({
   const [messages, setMessages] = useState(initialMessages);
   const [message, setMessage] = useState("");
   const channel = useRef<RealtimeChannel>();
+  const endOfMessagesRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollToBottom = () => {
+    endOfMessagesRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const {
-      target: { value },
-    } = event;
-    setMessage(value);
+    setMessage(event.target.value);
   };
 
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    setMessages((prevMsgs) => [
-      ...prevMsgs,
-      {
-        id: Date.now(),
-        payload: message,
-        created_At: new Date(),
-        userId,
-        user: {
-          username: "string",
-          avatar: "xxx",
-        },
+    if (!message.trim()) return;
+
+    const newMessage = {
+      id: Date.now(),
+      payload: message,
+      created_At: new Date(),
+      userId,
+      user: {
+        username,
+        avatar,
       },
-    ]);
+    };
+
+    setMessages((prevMsgs) => [...prevMsgs, newMessage]);
+
     channel.current?.send({
       type: "broadcast",
       event: "message",
-      payload: {
-        id: Date.now(),
-        payload: message,
-        created_at: new Date(),
-        userId,
-        user: {
-          username,
-          avatar,
-        },
-      },
+      payload: newMessage,
     });
+
     await saveMessage(message, chatRoomId);
     setMessage("");
+    scrollToBottom();
   };
-
 
   useEffect(() => {
     const client = createClient(SUPABASE_URL, SUPABASE_PUBLIC_KEY);
@@ -77,6 +74,7 @@ export default function ChatMessagesList({
     channel.current
       .on("broadcast", { event: "message" }, (payload) => {
         setMessages((prevMsgs) => [...prevMsgs, payload.payload]);
+        scrollToBottom();
       })
       .subscribe();
     return () => {
@@ -84,34 +82,25 @@ export default function ChatMessagesList({
     };
   }, [chatRoomId]);
 
-
   return (
     <div className="flex flex-col h-screen">
       <div className="flex-1 overflow-y-auto p-5">
         {messages.map((message) => (
           <div
             key={message.id}
-            className={`flex gap-2 items-center ${message.userId === userId ? "justify-end" : ""
-              }`}
+            className={`flex gap-2 items-center ${message.userId === userId ? "justify-end" : ""}`}
           >
             {message.userId === userId ? null : (
               <Image
-                src={message.user.avatar || '/default-avatar.jpg'} // 유저의 아바타가 있으면 사용하고, 없으면 기본 이미지 사용
+                src={message.user.avatar || '/default-avatar.jpg'}
                 alt={message.user.username}
                 width={50}
                 height={50}
-                className="size-8 rounded-full"
+                className="rounded-full"
               />
-
             )}
-            <div
-              className={`flex flex-col gap-1 ${message.userId === userId ? "items-end" : ""
-                }`}
-            >
-              <span
-                className={`${message.userId === userId ? "bg-neutral-500" : "bg-orange-500"
-                  } p-2.5 rounded-md`}
-              >
+            <div className={`flex flex-col gap-1 ${message.userId === userId ? "items-end" : ""}`}>
+              <span className={`${message.userId === userId ? "bg-neutral-500" : "bg-orange-500"} p-2.5 rounded-md`}>
                 {message.payload}
               </span>
               <span className="text-xs">
@@ -120,6 +109,7 @@ export default function ChatMessagesList({
             </div>
           </div>
         ))}
+        <div ref={endOfMessagesRef} />
       </div>
       <form className="sticky bottom-0 bg-gray-900 p-4" onSubmit={onSubmit}>
         <input
@@ -131,8 +121,8 @@ export default function ChatMessagesList({
           name="message"
           placeholder="Write a message..."
         />
-        <button className="absolute right-4">
-          <ArrowUpCircleIcon className="size-10 text-orange-500 transition-colors hover:text-orange-300" />
+        <button type="submit" className="absolute right-5 bottom-5">
+          <ArrowUpCircleIcon className="w-8 h-8  text-orange-500 transition-colors hover:text-orange-300" />
         </button>
       </form>
     </div>
