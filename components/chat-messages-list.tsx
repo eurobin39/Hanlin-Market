@@ -77,13 +77,18 @@ export default function ChatMessagesList({
         scrollToBottom();
       })
       .subscribe();
+      
+    // 초기 로딩 시 스크롤을 가장 아래로 이동
+    scrollToBottom();
+    
     return () => {
       channel.current?.unsubscribe();
     };
-  }, [chatRoomId]);
+}, [chatRoomId]); // chatRoomId가 변경될 때마다 실행됩니다.
+
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen pt-20">
       <div className="flex-1 overflow-y-auto p-5">
         {messages.map((message) => (
           <div

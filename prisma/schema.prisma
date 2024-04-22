@@ -15,19 +15,20 @@ datasource db {
 }
 
 model User {
-  id         Int        @id @default(autoincrement())
-  username   String     @unique
-  email      String?    @unique
-  password   String?
-  phone      String?    @unique
-  github_id  String?    @unique
-  avatar     String?
-  createAt   DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  smsToken   smsToken[]
-  product    Product[]
-  chat_rooms ChatRoom[]
-  messages   Message[]
+  id            Int        @id @default(autoincrement())
+  username      String     @unique
+  email         String?    @unique
+  password      String?
+  phone         String?    @unique
+  github_id     String?    @unique
+  avatar        String?
+  createAt      DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  smsToken      smsToken[]
+  product       Product[]
+  chat_rooms    ChatRoom[] @relation("UserChatRooms") // 사용자가 속한 채팅방
+  deletedByUser ChatRoom[] @relation("DeletedChatRooms") // 사용자가 삭제한 채팅방
+  messages      Message[]
 }
 
 model smsToken {
@@ -53,20 +54,22 @@ model Product {
 }
 
 model ChatRoom {
-  id         String    @id @default(cuid())
-  users      User[]
-  productId  Int
-  product    Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
-  created_At DateTime  @default(now())
-  updated_At DateTime  @updatedAt
-  messages   Message[]
+  id              String    @id @default(cuid())
+  users           User[]    @relation("UserChatRooms")
+  productId       Int
+  product         Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  created_At      DateTime  @default(now())
+  updated_At      DateTime  @updatedAt
+  messages        Message[]
+  deletedByUserId Int? // 채팅방을 삭제한 사용자의 ID
+  deletedByUser   User?     @relation("DeletedChatRooms", fields: [deletedByUserId], references: [id])
 }
 
 model Message {
   id         Int      @id @default(autoincrement())
   payload    String
   room       ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade )
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     Int
   chatRoomId String
   created_At DateTime @default(now())

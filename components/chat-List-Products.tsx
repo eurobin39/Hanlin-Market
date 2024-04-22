@@ -15,12 +15,12 @@ interface ChatListProductsProps {
 export default function ChatListProduct({
     title, price, created_At, photo, id, chatRoomId,
 }: ChatListProductsProps) {
-    console.log({ chatRoomId });
+    
     return (
         
         <div>
             <Link href={`/chats/select-room/${id}`} className="flex gap-5 border-b pb-5 w-full border-gray-600">
-                <div className="relative size-32 rounded-md overflow-hidden" >
+                <div className="relative size-24 rounded-md overflow-hidden" >
                     <div>
                         <Image
                             fill

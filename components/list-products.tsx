@@ -16,7 +16,7 @@ export default function ListProduct({
     return (
         <div className="">
             <Link href={`/products/${id}`} className="flex gap-5 border-b pb-5  w-full border-gray-600">
-                <div className="relative size-32 rounded-md overflow-hidden" >
+                <div className="relative size-24 rounded-md overflow-hidden" >
                     <div>
                         <Image
                             fill

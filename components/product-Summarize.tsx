@@ -18,12 +18,11 @@ export default function ProductSummarize({
 }: ChatListSumProductsProps) {
 
     return (
-
-        <div className="flex gap-3 items-center border-b p-2 w-full border-gray-600">
+        // sticky 속성을 추가하여 위치 고정
+        <div className="flex gap-3 items-center border-b p-2 w-full border-gray-600 sticky top-0 z-10 bg-gray-900">
             <Link href={`/chats/select-room/${id}`}
                 className="flex items-center justify-center h-10 w-10 rounded-full">
                 <ChevronLeftIcon className="size-12 text-gray-600" />
-
             </Link>
 
             <Link href={`/products/${id}`} className="flex gap-5 p-2 w-full border-gray-600">
@@ -41,12 +40,8 @@ export default function ProductSummarize({
                     <span className="font-bold">{title}</span>
                     <span>€{formatToWon(price)}</span>
                 </div>
-
-
             </Link>
             <ChatDeleteButton chatId={chatroomId} />
-
         </div>
-
     )
 }

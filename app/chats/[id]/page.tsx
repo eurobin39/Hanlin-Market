@@ -6,16 +6,29 @@ import db from "@/lib/db";
 import getSession from "@/lib/session";
 import { Prisma } from "@prisma/client";
 import { notFound } from "next/navigation";
+import deleteChatRoomAction from "./chatRoomDelete.actions";
 
 async function getRoom(id: string) {
+  const session = await getSession();
+  const userId = session?.id;  // 현재 세션의 사용자 ID
   try {
     const room = await db.chatRoom.findUnique({
       where: {
         id,
+        AND: [
+          {
+            OR: [
+              { deletedByUserId: null },
+              { deletedByUserId: { not: userId } }
+            ]
+          }
+        ],
       },
       include: {
         users: {
-          select: { id: true },
+          select: { 
+            id: true 
+          },
         },
         product: { // 채팅방과 관련된 상품 정보도 함께 조회
           select: {
@@ -87,12 +100,27 @@ export default async function ChatRoom({ params }: { params: { id: string } }) {
   if (!room) {
     return notFound();
   }
+
   const initialMessages = await getMessages(params.id);
   const session = await getSession();
   const user = await getUserProfile();
+
+  console.log(room.deletedByUserId);
+  
+  const roomOpen = !room.deletedByUserId
+  console.log(roomOpen)
+  if(!roomOpen){
+    const res = await deleteChatRoomAction(params.id);
+    console.log("deleted")
+  }
+ 
+
+
   if (!user) {
     return notFound();
   }
+
+ 
 
   return (
     <>
