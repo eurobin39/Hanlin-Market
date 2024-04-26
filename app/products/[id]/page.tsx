@@ -2,7 +2,7 @@
 import { notFound, redirect } from "next/navigation";
 import db from "@/lib/db";
 import getSession from "@/lib/session";
-import { HandThumbUpIcon, UserIcon } from "@heroicons/react/20/solid";
+import { HandThumbUpIcon, HeartIcon, UserIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
 import Image from "next/image";
 import { formatToWon } from "@/lib/utils";
@@ -109,16 +109,30 @@ export default async function productDetail({ params
         </div>
 
       </div>
-      <div className="p-5 flex items-center gap-3 border-b border-neutral-700">
-        <div className="size-10 rounded-full">
-          {product.user.avatar !== null ? <Image className="rounded-full" src={product.user.avatar} width={40} height={40} alt={product.user.username} /> :
-            <UserIcon />}
+      <div className="p-5 flex items-center gap-3 border-b border-neutral-700 justify-between">
+        <div className="flex items-center gap-3">
+          <div className="size-10 rounded-full">
+            {product.user.avatar !== null ?
+              <Image className="rounded-full" src={product.user.avatar} width={40} height={40} alt={product.user.username} /> :
+              <UserIcon />}
+          </div>
+          <div>
+            <h3>{product.user.username}</h3>
+          </div>
         </div>
+
         <div>
-          <h3>{product.user.username}</h3>
-          
+          <form action={isLiked ? dislikePost : likePost}>
+            <button
+              className={`flex items-center gap-2 ${isLiked ? "text-red-500" : "text-neutral-400"} border border-neutral-400 rounded-full p-2 hover:bg-neutral-800 transition-colors`}
+            >
+              <HeartIcon className="size-5" />
+              <span>Like({product._count.like})</span>
+            </button>
+          </form>
         </div>
       </div>
+
       <div className="p-5 mb-16">
         <h1 className="text-2xl font-semibold pb-3">{product.title}</h1>
         <p className="relative p-5 border-2 border-neutral-600 rounded-md w-full auto">
@@ -132,16 +146,7 @@ export default async function productDetail({ params
         <AddChatButton productId={product.id} />
 
       </div>
-      <div>
-      <form action={isLiked ? dislikePost : likePost}>
-          <button
-            className={`flex items-center gap-2 text-neutral-400 text-sm border border-neutral-400 rounded-full p-2 hover:bg-neutral-800 transition-colors`}
-          >
-            <HandThumbUpIcon className="size-5" />
-            <span>공감하기({product._count.like})</span>
-          </button>
-        </form>
-      </div>
+
 
     </div >
 

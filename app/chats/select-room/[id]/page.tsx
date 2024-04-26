@@ -14,7 +14,7 @@ export default async function component({ params }: {
   const chatRoomDetails = await selectRoom(Number(id));
 
 
-  console.log(chatRoomDetails);
+  
 
 
 

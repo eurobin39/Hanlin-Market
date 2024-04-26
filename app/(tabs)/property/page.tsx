@@ -1,4 +1,4 @@
-export default function Currency(){
+export default function Property(){
     return(
         <div>
             <h1 className="text-white text-4xl"></h1>

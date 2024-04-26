@@ -26,6 +26,7 @@ export default function ProductList({ initialProducts }: ProductListProps) {
             observer.unobserve(trigger.current);
             setIsLoading(true);
             const newProducts = await getMoreProducts(page + 1);
+            
             if (newProducts.length !== 0) {
               setProducts((prev) => [...prev, ...newProducts]);
               setPage((prev) => prev + 1);
@@ -46,6 +47,8 @@ export default function ProductList({ initialProducts }: ProductListProps) {
         observer.disconnect();
       };
     }, [page]);
+
+    
     return (
         
         <div className="py-20">
