@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import deleteChatRoomAction from "./chatRoomDelete.actions";
+import deleteChatRoomAction, { deleteChatRoom } from "./chatRoomDelete.actions";
 
 
 type Props = {
@@ -15,6 +15,7 @@ export default function ChatDeleteButton({ chatId }: Props) {
 
     if (res) {
       alert("삭제되었습니다");
+      deleteChatRoom(chatId)
       router.replace("/chats");
     } else {
       alert("실패했습니다");

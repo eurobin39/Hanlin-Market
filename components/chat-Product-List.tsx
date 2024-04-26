@@ -2,6 +2,7 @@ import React from "react";
 import ChatListProduct from "./chat-List-Products";
 import { InitialchatProducts } from "@/app/(tabs)/chats/page";
 
+
 interface ProductListProps {
     initialChatProducts : InitialchatProducts ;
     
@@ -11,19 +12,20 @@ interface ProductListProps {
 export default function ChatProductList({ initialChatProducts } : ProductListProps) {
     // 중복 ID 제거
     const uniqueChatProducts = Array.from(new Map(initialChatProducts.map(product => [product.id, product])).values());
+
   
     // initialChatProducts가 비어있는 경우, 메시지 표시
     if (!uniqueChatProducts || uniqueChatProducts.length === 0) {
       return <p>채팅 가능한 제품이 없습니다.</p>;
     }
     
-  
     // 제품 목록 렌더링
     return (
-      <div className="p-2 flex flex-col gap-4">
+      <div className="p-2 flex flex-col gap-4 ">
         {uniqueChatProducts.map((product) => (
           <ChatListProduct key={product.id} {...product} />
         ))}
       </div>
     );
 }
+

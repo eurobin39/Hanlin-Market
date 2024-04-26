@@ -1,6 +1,8 @@
 import db from "@/lib/db";
 import getSession from "@/lib/session";
 
+
+
 export default async function selectRoom(productId: number) {
   const session = await getSession();
   const userId = session?.id;  // 현재 세션의 사용자 ID

@@ -8,14 +8,16 @@ interface ListProductsProps {
     created_At: Date;
     photo: string;
     id: number;
+    like?: boolean;
 }
 
 export default function ListProduct({
-    title, price, created_At, photo, id,
+    title, price, created_At, photo, id, like
 }: ListProductsProps) {
     return (
-        <div className="">
-            <Link href={`/products/${id}`} className="flex gap-5 border-b pb-5  w-full border-gray-600">
+        <div className="p-4 bg-gray-800 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+        
+            <Link href={`/products/${id}`} className="flex gap-5 py-2 w-full">
                 <div className="relative size-24 rounded-md overflow-hidden" >
                     <div>
                         <Image
@@ -34,6 +36,9 @@ export default function ListProduct({
 
 
             </Link>
+            <div>
+                like:{like};
+            </div>
 
         </div>
 

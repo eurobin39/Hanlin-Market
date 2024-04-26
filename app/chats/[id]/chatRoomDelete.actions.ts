@@ -3,6 +3,30 @@
 import db from "@/lib/db";
 import getSession from "@/lib/session";
 
+export async function deleteChatRoom(chatRoomId: string){
+
+    const remainUser = await db.chatRoom.findFirst({
+        where: {
+            id: chatRoomId,
+        },
+        include: {
+            users: true,
+        }
+
+    })
+
+    if(remainUser && remainUser.users.length > 0){
+        return
+    }
+
+    const finalDeleteChatRoom = await db.chatRoom.delete({
+        where: {
+            id: chatRoomId,
+        }
+    })
+}
+
+
 export default async function deleteChatRoomAction(chatId: string) {
     const session = await getSession();
     const userId = session.id;

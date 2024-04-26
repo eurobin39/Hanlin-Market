@@ -9,37 +9,35 @@ interface ChatListProductsProps {
     photo: string;
     id: number;
     chatRoomId: string;
-    
+    numberOfChatRoom?: number;
 }
 
 export default function ChatListProduct({
-    title, price, created_At, photo, id, chatRoomId,
+    title, price, created_At, photo, id, numberOfChatRoom
 }: ChatListProductsProps) {
     
     return (
-        
-        <div>
-            <Link href={`/chats/select-room/${id}`} className="flex gap-5 border-b pb-5 w-full border-gray-600">
-                <div className="relative size-24 rounded-md overflow-hidden" >
-                    <div>
+        <div className="p-4 bg-gray-800 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+            <Link href={`/chats/select-room/${id}`} className="flex gap-5 items-center justify-between w-full py-2">
+                <div className="flex gap-5 items-center">
+                    <div className="relative w-24 h-24 rounded-md overflow-hidden">
                         <Image
-                            fill
+                            layout="fill"
                             src={`${photo}/avatar`}
-                            className="object-cover"
+                            objectFit="cover"
                             alt={title}
                         />
                     </div>
+                    <div className="flex flex-col justify-center text-white gap-1">
+                        <span className="font-bold">{title}</span>
+                        <span>{formatToTimeAgo(created_At.toString())}</span>
+                        <span>€{formatToWon(price)}</span>
+                    </div>
                 </div>
-                <div className="flex flex-col justify-center gap-1 *:text-white">
-                    <span className="font-bold">{title}</span>
-                    <span>{formatToTimeAgo(created_At.toString())}</span>
-                    <span>€{formatToWon(price)}</span>
+                <div className="text-white font-bold">
+                    {numberOfChatRoom ? `Chat Rooms: ${numberOfChatRoom}` : 'No active chats'}
                 </div>
-
-
             </Link>
-
         </div>
-
-    )
+    );
 }

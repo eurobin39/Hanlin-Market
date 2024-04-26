@@ -5,6 +5,9 @@ import { Prisma } from "@prisma/client";
 import Link from "next/link";
 import { PlusIcon } from "@heroicons/react/20/solid";
 
+
+
+  
 export async function getInitialProducts() {
     const products = await db.product.findMany({
         select: {
@@ -13,6 +16,11 @@ export async function getInitialProducts() {
             created_At: true,
             photo: true,
             id: true,
+            _count: {
+                select: {
+                    like: true,
+                }
+            }
         },
         take: 1,
         orderBy: {

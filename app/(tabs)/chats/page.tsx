@@ -61,6 +61,16 @@ export async function getChatRoomIdsFromProduct(productId: number) {
   return chatRoomIds; // ChatRoom ID들을 반환합니다.
 }
 
+export async function countChatRoom(productId: number){
+  
+  const numberOfChatRoom = await db.chatRoom.count({
+    where: {
+      productId: productId,
+    }
+  })
+  return numberOfChatRoom
+  }
+
 
 export type InitialchatProducts = Prisma.PromiseReturnType<typeof getChatInitialProducts>;
 
@@ -82,9 +92,11 @@ export default async function Products() {
   // 각 상품에 대해 연결된 채팅방 ID를 조회하고, 그에 따라 처리합니다.
   const chatProductsWithRoomIds = await Promise.all(chatInitialProducts.map(async (product) => {
     const chatRoomIds = await getChatRoomIdsFromProduct(product.id);
+    const numberOfChatRoom = await countChatRoom(product.id);
     return {
       ...product,
       chatRoomIds, // 상품 정보에 채팅방 ID 정보 추가
+      numberOfChatRoom,
     };
   }));
 

@@ -2,7 +2,7 @@
 import { notFound, redirect } from "next/navigation";
 import db from "@/lib/db";
 import getSession from "@/lib/session";
-import { UserIcon } from "@heroicons/react/20/solid";
+import { HandThumbUpIcon, UserIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
 import Image from "next/image";
 import { formatToWon } from "@/lib/utils";
@@ -10,6 +10,8 @@ import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import ProductDeleteButton from "./delete.button";
 import AddChatButton from "./addChatButton";
+import { revalidatePath } from "next/cache";
+import { getIsLiked } from "@/components/like-Dislike";
 
 
 export async function getIsOwner(userId: number) {
@@ -30,6 +32,11 @@ async function getProduct(id: number) {
           avatar: true,
         },
       },
+      _count: {
+        select: {
+          like: true,
+        }
+      }
     },
   });
   return product;
@@ -53,9 +60,37 @@ export default async function productDetail({ params
   }
   const isOwner = await getIsOwner(product.userId); // 실제 구조에 맞게 조정
 
+  const likePost = async () => {
+    "use server";
+    const session = await getSession();
+    try {
+      await db.like.create({
+        data: {
+          productId: id,
+          userId: session.id!,
+        },
+      });
+      revalidatePath(`/products/${id}`);
+    } catch (e) { }
+  };
+  const dislikePost = async () => {
+    "use server";
+    try {
+      const session = await getSession();
+      await db.like.delete({
+        where: {
+          id: {
+            productId: id,
+            userId: session.id!,
+          },
+        },
+      });
+      revalidatePath(`/products/${id}`);
+    } catch (e) { }
+  };
+  const isLiked = await getIsLiked(id);
 
 
-  
   return (
 
     <div>
@@ -81,6 +116,7 @@ export default async function productDetail({ params
         </div>
         <div>
           <h3>{product.user.username}</h3>
+          
         </div>
       </div>
       <div className="p-5 mb-16">
@@ -95,6 +131,16 @@ export default async function productDetail({ params
 
         <AddChatButton productId={product.id} />
 
+      </div>
+      <div>
+      <form action={isLiked ? dislikePost : likePost}>
+          <button
+            className={`flex items-center gap-2 text-neutral-400 text-sm border border-neutral-400 rounded-full p-2 hover:bg-neutral-800 transition-colors`}
+          >
+            <HandThumbUpIcon className="size-5" />
+            <span>공감하기({product._count.like})</span>
+          </button>
+        </form>
       </div>
 
     </div >
