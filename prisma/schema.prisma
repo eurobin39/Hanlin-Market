@@ -57,17 +57,20 @@ model Product {
 }
 
 model Home {
-  id          Int        @id @default(autoincrement())
-  title       String
-  price       Float
-  photos      String[]
-  description String
-  created_At  DateTime   @default(now())
-  updated_At  DateTime   @updatedAt
-  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      Int
-  ChatRooms   ChatRoom[]
-  like        Like[]
+  id            Int        @id @default(autoincrement())
+  title         String
+  price         Float
+  photos        String[]
+  description   String
+  contractStart DateTime?
+  contractEnd   DateTime?
+  location      String
+  created_At    DateTime   @default(now())
+  updated_At    DateTime   @updatedAt
+  user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        Int
+  ChatRooms     ChatRoom[]
+  like          Like[]
 }
 
 model ChatRoom {
@@ -78,7 +81,7 @@ model ChatRoom {
   created_At      DateTime  @default(now())
   updated_At      DateTime  @updatedAt
   messages        Message[]
-  deletedByUserId Int? // 채팅방을 삭제한 사용자의 ID
+  deletedByUserId Int? 
   deletedByUser   User?     @relation("DeletedChatRooms", fields: [deletedByUserId], references: [id])
   Home            Home?     @relation(fields: [homeId], references: [id])
   homeId          Int?

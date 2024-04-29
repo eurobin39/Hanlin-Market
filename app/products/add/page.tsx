@@ -13,7 +13,7 @@ export default function AddProduct() {
     const [imageId, setImageId] = useState("");
     const onImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const { target: { files } } = event;
-        if (!files ) {
+        if (!files) {
             return;
         }
         const file = files[0];
@@ -29,7 +29,7 @@ export default function AddProduct() {
 
         const url = URL.createObjectURL(file);
         setPreview(url);
-        const { success , result } = await getUploadUrl();
+        const { success, result } = await getUploadUrl();
         if (success) {
             const { id, uploadURL } = result;
             setUploadUrl(uploadURL);
@@ -37,6 +37,8 @@ export default function AddProduct() {
         }
 
     };
+
+
     const interceptAction = async (_: any, formData: FormData) => {
         const file = formData.get("photo");
         if (!file) {
@@ -48,7 +50,7 @@ export default function AddProduct() {
             method: "POST",
             body: cloudflareForm,
         });
-        console.log(await response.text());
+
         if (response.status !== 200) {
             alert('Something Goes Wrong!');
             return;

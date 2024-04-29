@@ -7,6 +7,7 @@ const nextConfig = {
                 hostname: "imagedelivery.net",
             },
         ],
+    
     },
     // 필요한 추가 설정을 여기에 추가
 };

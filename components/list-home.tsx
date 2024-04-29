@@ -1,32 +1,32 @@
 import Link from "next/link";
-import Image from "next/image";
 import { formatToTimeAgo, formatToWon } from "@/lib/utils";
 import { HeartIcon } from "@heroicons/react/20/solid";
+import Image from "next/image";
 
-interface ListProductsProps {
+interface ListPropertiesProps {
     title: string;
     price: number;
     created_At: Date;
-    photo: string;
+    photos: string[];
     id: number;
     _count: {
         like: number;
     }
 }
 
-export default function ListProduct({
-    title, price, created_At, photo, id, _count
-}: ListProductsProps) {
+export default function ListProperties({
+    title, price, created_At, photos, id, _count
+}: ListPropertiesProps) {
 
-    
+    let imageUrl = photos?.length > 0 ? photos[0] : '/default-image.png';
+
     return (
         <div className="p-4 bg-gray-800 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 relative">
-
-            <Link href={`/products/${id}`} className="flex gap-5 py-2 w-full">
+            <Link href={`/properties/${id}`} className="flex gap-5 py-2 w-full">
                 <div className="relative size-24 rounded-md overflow-hidden">
-                    <Image
+                <Image
                         fill
-                        src={`${photo}/avatar`}
+                        src={`${imageUrl}/avatar`}
                         className="object-cover"
                         alt={title}
                     />
@@ -38,11 +38,10 @@ export default function ListProduct({
                 </div>
             </Link>
 
-            
             <div className="absolute bottom-6 right-6 flex items-center space-x-2">
                 <HeartIcon className="h-6 w-6 text-red-500" />
                 <span className="text-white">{_count.like}</span>
             </div>
         </div>
-    )
+    );
 }
