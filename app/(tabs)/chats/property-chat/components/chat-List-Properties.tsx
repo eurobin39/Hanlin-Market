@@ -18,7 +18,7 @@ export default function ChatListProperty({
     
     return (
         <div className="p-4 bg-gray-800 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
-            <Link href={`/chats/select-room/${id}`} className="flex gap-5 items-center justify-between w-full py-2">
+            <Link href={`/chats/select-room/properties-chat/${id}`} className="flex gap-5 items-center justify-between w-full py-2">
                 <div className="flex gap-5 items-center">
                     <div className="relative w-24 h-24 rounded-md overflow-hidden">
                         <Image

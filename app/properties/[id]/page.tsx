@@ -149,7 +149,6 @@ export default async function propertyDetail({ params
       </div>
       <div className="fixed mx-auto w-full max-w-screen-sm bottom-0 p-5 pb-5 bg-neutral-800 flex justify-between items-center">
         <span className="font-semibold text-lg">€{formatToWon(property.price)}</span>
-        <span className="font-semibold text-lg">€{formatToWon(property.price)}</span>
         {isOwner ? <PropertyDeleteButton propertyId={property.id} /> : null}
 
         <AddChatButton propertyId={property.id} />

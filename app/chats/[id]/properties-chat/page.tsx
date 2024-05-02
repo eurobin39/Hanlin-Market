@@ -8,6 +8,7 @@ import { Prisma } from "@prisma/client";
 import { notFound } from "next/navigation";
 import deleteChatRoomAction from "../chatRoomDelete.actions";
 import PropertySummarize from "@/components/home-summarize";
+import ChatHomeMessagesList from "@/components/chat-messages-list-home";
 
 async function getHomeRoom(id: string) {
   const session = await getSession();
@@ -132,12 +133,13 @@ export default async function ChatRoom({ params }: { params: { id: string } }) {
         photos={room.home.photos}
         chatroomId={params.id}
       />
-      <ChatMessagesList
+      <ChatHomeMessagesList
         chatRoomId={params.id}
         userId={session.id!}
         username={user.username}
         avatar={user.avatar!}
         initialMessages={initialMessages}
+
       />
     </>
   );

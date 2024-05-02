@@ -14,3 +14,15 @@ export async function saveMessage(payload: string, chatRoomId: string) {
     select: { id: true },
   });
 }
+
+export async function saveHomeMessage(payload: string, chatRoomId: string) {
+  const session = await getSession();
+  await db.homeMessage.create({
+    data: {
+      payload,
+      chatRoomId,
+      userId: session.id!,
+    },
+    select: { id: true },
+  });
+}

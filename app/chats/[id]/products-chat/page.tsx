@@ -105,10 +105,9 @@ export default async function ChatRoom({ params }: { params: { id: string } }) {
   const session = await getSession();
   const user = await getUserProfile();
 
-  console.log(room.deletedByUserId);
   
   const roomOpen = !room.deletedByUserId
-  console.log(roomOpen)
+
   if(!roomOpen){
     const res = await deleteChatRoomAction(params.id);
     console.log("deleted")

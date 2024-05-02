@@ -33,10 +33,10 @@ export async function getChatInitialProperties(userId: number) {
 
 
 
-export async function getChatHomeRoomIdsFromProperty(productId: number) {
+export async function getChatHomeRoomIdsFromProperty(propertyId: number) {
   const chatRooms = await db.chatHomeRoom.findMany({
     where: {
-      homeId: productId, // Product ID로 ChatRoom을 찾습니다.
+      homeId: propertyId, 
     },
     select: {
       id: true, // ChatRoom의 ID만 선택하여 가져옵니다.

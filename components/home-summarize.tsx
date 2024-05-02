@@ -20,12 +20,12 @@ export default function PropertySummarize({
     return (
         // sticky 속성을 추가하여 위치 고정
         <div className="flex gap-3 items-center border-b p-2 w-full border-gray-600 sticky top-0 z-10 bg-gray-900">
-            <Link href={`/chats/select-room/${id}`}
+            <Link href={`/chats/select-room/properties-chat/${id}`}
                 className="flex items-center justify-center h-10 w-10 rounded-full">
                 <ChevronLeftIcon className="size-12 text-gray-600" />
             </Link>
 
-            <Link href={`/products/${id}`} className="flex gap-5 p-2 w-full border-gray-600">
+            <Link href={`/properties/${id}`} className="flex gap-5 p-2 w-full border-gray-600">
                 <div className="relative size-16 rounded-md overflow-hidden" >
                     <div>
                         <Image

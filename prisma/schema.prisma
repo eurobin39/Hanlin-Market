@@ -35,6 +35,7 @@ model User {
   ChatHomeRoom      ChatHomeRoom[] @relation("UserChatHomeRooms")
   deleteHomedByUser ChatHomeRoom[] @relation("DeletedChatHomeRooms")
   HomeMessage       HomeMessage[]
+  UserMessage       UserMessage[]
 }
 
 model smsToken {
@@ -93,15 +94,25 @@ model ChatHomeRoom {
 }
 
 model ChatRoom {
-  id              String    @id @default(cuid())
-  users           User[]    @relation("UserChatRooms")
+  id              String          @id @default(cuid())
+  users           User[]          @relation("UserChatRooms")
   productId       Int
-  product         Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
-  created_At      DateTime  @default(now())
-  updated_At      DateTime  @updatedAt
+  product         Product         @relation(fields: [productId], references: [id], onDelete: Cascade)
+  created_At      DateTime        @default(now())
+  updated_At      DateTime        @updatedAt
   messages        Message[]
   deletedByUserId Int?
-  deletedByUser   User?     @relation("DeletedChatRooms", fields: [deletedByUserId], references: [id])
+  deletedByUser   User?           @relation("DeletedChatRooms", fields: [deletedByUserId], references: [id])
+  RoomUserStates  RoomUserState[]
+}
+
+model RoomUserState {
+  chatRoom   ChatRoom  @relation(fields: [chatRoomId], references: [id])
+  chatRoomId String    
+  userId     Int
+  lastReadAt DateTime? @default(now())
+
+  @@id([chatRoomId, userId])
 }
 
 model HomeMessage {
@@ -113,6 +124,7 @@ model HomeMessage {
   chatRoomId String
   created_At DateTime     @default(now())
   updated_At DateTime     @updatedAt
+  isRead     Boolean      @default(false)
 }
 
 model Message {
@@ -126,6 +138,8 @@ model Message {
   updated_At     DateTime      @updatedAt
   ChatHomeRoom   ChatHomeRoom? @relation(fields: [chatHomeRoomId], references: [id])
   chatHomeRoomId String?
+  isRead         Boolean       @default(false)
+  UserMessage    UserMessage[]
 }
 
 model Like {
@@ -140,6 +154,17 @@ model Like {
   homeId    Int?
 
   @@id(name: "id", [userId, productId])
+}
+
+model UserMessage {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  messageId Int
+  readAt    DateTime?
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  message   Message   @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, messageId])
 }
 
 model Saved {

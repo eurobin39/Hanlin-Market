@@ -1,6 +1,6 @@
 "use client";
 
-import { saveMessage } from "@/app/chats/actions";
+import { saveHomeMessage, saveMessage } from "@/app/chats/actions";
 import { InitialChatMessages } from "@/app/chats/[id]/products-chat/page";
 
 import { formatToTimeAgo } from "@/lib/utils";
@@ -20,7 +20,7 @@ interface ChatMessageListProps {
   avatar: string;
 }
 
-export default function ChatMessagesList({
+export default function ChatHomeMessagesList({
   initialMessages,
   userId,
   chatRoomId,
@@ -29,7 +29,7 @@ export default function ChatMessagesList({
 }: ChatMessageListProps) {
   const [messages, setMessages] = useState(initialMessages);
   const [message, setMessage] = useState("");
-  const [unreadCount, setUnreadCount] = useState(0);
+  const [unreadCount, setUnreadCount] = useState(0); // 읽지 않은 메시지 수 추적
   const channel = useRef<RealtimeChannel>();
   const endOfMessagesRef = useRef<HTMLDivElement | null>(null);
 
@@ -65,13 +65,9 @@ export default function ChatMessagesList({
       payload: newMessage,
     });
 
-    await saveMessage(message, chatRoomId);
+    await saveHomeMessage(message, chatRoomId);
     setMessage("");
     scrollToBottom();
-  };
-
-  const handleFocus = () => {
-    setUnreadCount(0);
   };
 
   useEffect(() => {
@@ -83,25 +79,32 @@ export default function ChatMessagesList({
         setMessages((prevMsgs) => [...prevMsgs, newMsg]);
 
         if (newMsg.userId !== userId) {
-          setUnreadCount((prevCount) => prevCount + 1);
+          setUnreadCount((prevCount) => prevCount + 1); // 읽지 않은 메시지 수 증가
         }
 
         scrollToBottom();
       })
       .subscribe();
 
+    const markMessagesAsRead = async () => {
+      await fetch(`/api/messages/markAsRead?userId=${userId}&chatRoomId=${chatRoomId}`, {
+        method: 'POST',
+      });
+      setMessages((currentMessages) =>
+        currentMessages.map((msg) => ({ ...msg, isRead: true }))
+      );
+      setUnreadCount(0); // 읽지 않은 메시지 수 초기화
+    };
+
+    markMessagesAsRead();
+
     return () => {
       channel.current?.unsubscribe();
     };
-  }, [chatRoomId]);
-
-
+}, [chatRoomId]);
 
   return (
     <div className="flex flex-col h-screen pt-20">
-      <div className="p-5 bg-gray-800 text-white">
-        Unread Messages: {unreadCount}
-      </div>
       <div className="flex-1 overflow-y-auto p-5">
         {messages.map((message) => (
           <div
@@ -133,7 +136,6 @@ export default function ChatMessagesList({
         <input
           required
           onChange={onChange}
-          onFocus={handleFocus}
           value={message}
           className="bg-transparent rounded-full w-full h-10 focus:outline-none px-5 ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-neutral-50 border-none placeholder:text-neutral-400"
           type="text"

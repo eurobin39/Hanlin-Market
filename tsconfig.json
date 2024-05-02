@@ -32,7 +32,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "app/chats/select-room/properties-chat"  ],
   "exclude": [
     "node_modules"
   ]
