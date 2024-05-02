@@ -14,7 +14,7 @@ export default async function component({ params }: {
   const chatRoomDetails = await selectRoom(Number(id));
 
 
-  
+
 
 
 
@@ -29,8 +29,8 @@ export default async function component({ params }: {
         ) : (
           // 삭제되지 않은 채팅방에 대한 처리
           <div className=' p-2 justify-start items-center w-full' key={roomDetail.roomId}>
-            <Link href={`/chats/${roomDetail.roomId}/products-chat`}>
-              
+             <Link href={`/chats/${roomDetail.roomId}/products-chat`} className="flex items-center justify-between w-full">
+
               <div className='flex flex-col gap-2'>
                 {roomDetail.participants.map((participant) => (
                   <div key={participant.id} className="flex items-center gap-5">
@@ -38,11 +38,16 @@ export default async function component({ params }: {
                     <div>
                       <p className="font-bold">{participant.username}</p>
                       <p className="text-gray-500">{roomDetail.latestMessage}</p>
-                      <p>{roomDetail.unreadCount}</p>
+
                     </div>
                   </div>
                 ))}
               </div>
+              {roomDetail.unreadCount > 0 && (
+                <div className="flex items-center justify-center min-w-8 h-8 rounded-full bg-yellow-500">
+                  <span className="text-red-600 text-sm font-bold">{roomDetail.unreadCount}</span>
+                </div>
+              )}
             </Link>
           </div>
         )

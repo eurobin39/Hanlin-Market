@@ -70,38 +70,49 @@ export default function ChatMessagesList({
     scrollToBottom();
   };
 
-  const handleFocus = () => {
-    setUnreadCount(0);
-  };
-
   useEffect(() => {
     const client = createClient(SUPABASE_URL, SUPABASE_PUBLIC_KEY);
     channel.current = client.channel(`room-${chatRoomId}`);
+  
     channel.current
       .on("broadcast", { event: "message" }, (payload) => {
         const newMsg = payload.payload;
         setMessages((prevMsgs) => [...prevMsgs, newMsg]);
-
-        if (newMsg.userId !== userId) {
+  
+        if (document.visibilityState === "visible" && newMsg.userId !== userId) {
+          setUnreadCount(0);
+        } else {
           setUnreadCount((prevCount) => prevCount + 1);
         }
-
+  
         scrollToBottom();
       })
       .subscribe();
-
+  
+    // 페이지의 가시성 변경을 감지하는 이벤트 리스너 추가
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        setUnreadCount(0);
+      }
+    };
+  
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+  
     return () => {
       channel.current?.unsubscribe();
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [chatRoomId]);
-
+  }, [chatRoomId, userId]);
+  
+  // onFocus 이벤트 핸들러에서 읽지 않은 메시지 카운트를 조정
+  const handleFocus = () => {
+    setUnreadCount(0);
+  };
+  
 
 
   return (
     <div className="flex flex-col h-screen pt-20">
-      <div className="p-5 bg-gray-800 text-white">
-        Unread Messages: {unreadCount}
-      </div>
       <div className="flex-1 overflow-y-auto p-5">
         {messages.map((message) => (
           <div

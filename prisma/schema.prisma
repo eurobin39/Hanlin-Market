@@ -113,6 +113,7 @@ model RoomUserState {
   lastReadAt DateTime? @default(now())
 
   @@id([chatRoomId, userId])
+  @@unique([userId, chatRoomId])
 }
 
 model HomeMessage {

@@ -8,6 +8,40 @@ import { Prisma } from "@prisma/client";
 import { notFound } from "next/navigation";
 import deleteChatRoomAction from "../chatRoomDelete.actions";
 
+async function enterChatRoom(chatRoomId: string) {
+  const session = await getSession();
+  const userId = session?.id;
+
+  if (!userId) {
+    console.error('사용자가 로그인하지 않았습니다.');
+    return { error: "User not logged in" };
+  }
+
+  try {
+    // RoomUserStates 업데이트
+    await db.roomUserState.upsert({
+      where: {
+        userId_chatRoomId: {
+          userId: userId,
+          chatRoomId: chatRoomId,
+        },
+      },
+      update: {
+        lastReadAt: new Date(),
+      },
+      create: {
+        userId: userId,
+        chatRoomId: chatRoomId,
+        lastReadAt: new Date(),
+      }
+    });
+    console.log('Chat room entry recorded.');
+  } catch (error) {
+    console.error('Error updating lastReadAt in enterChatRoom:', error);
+    return { error: "Failed to update last read time" };
+  }
+}
+
 async function getRoom(id: string) {
   const session = await getSession();
   const userId = session?.id;  // 현재 세션의 사용자 ID
@@ -26,8 +60,8 @@ async function getRoom(id: string) {
       },
       include: {
         users: {
-          select: { 
-            id: true 
+          select: {
+            id: true
           },
         },
         product: { // 채팅방과 관련된 상품 정보도 함께 조회
@@ -54,6 +88,8 @@ async function getRoom(id: string) {
     console.error("getRoom Function Error", e);
     throw e;
   }
+
+
 
 }
 
@@ -101,25 +137,28 @@ export default async function ChatRoom({ params }: { params: { id: string } }) {
     return notFound();
   }
 
+  await enterChatRoom(params.id);
+  
   const initialMessages = await getMessages(params.id);
   const session = await getSession();
   const user = await getUserProfile();
 
-  
+
+
   const roomOpen = !room.deletedByUserId
 
-  if(!roomOpen){
+  if (!roomOpen) {
     const res = await deleteChatRoomAction(params.id);
     console.log("deleted")
   }
- 
+
 
 
   if (!user) {
     return notFound();
   }
 
- 
+
 
   return (
     <>
