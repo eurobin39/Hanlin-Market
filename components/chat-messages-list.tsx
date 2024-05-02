@@ -1,7 +1,7 @@
 "use client";
 
 import { saveMessage } from "@/app/chats/actions";
-import { InitialChatMessages } from "@/app/chats/[id]/page";
+import { InitialChatMessages } from "@/app/chats/[id]/products-chat/page";
 
 import { formatToTimeAgo } from "@/lib/utils";
 import { ArrowUpCircleIcon } from "@heroicons/react/24/solid";

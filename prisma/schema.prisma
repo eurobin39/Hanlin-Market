@@ -15,22 +15,26 @@ datasource db {
 }
 
 model User {
-  id            Int        @id @default(autoincrement())
-  username      String     @unique
-  email         String?    @unique
-  password      String?
-  phone         String?    @unique
-  github_id     String?    @unique
-  avatar        String?
-  createAt      DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  smsToken      smsToken[]
-  product       Product[]
-  chat_rooms    ChatRoom[] @relation("UserChatRooms") // 사용자가 속한 채팅방
-  deletedByUser ChatRoom[] @relation("DeletedChatRooms") // 사용자가 삭제한 채팅방
-  messages      Message[]
-  like          Like[]
-  Home          Home[]
+  id                Int            @id @default(autoincrement())
+  username          String         @unique
+  email             String?        @unique
+  password          String?
+  phone             String?        @unique
+  github_id         String?        @unique
+  avatar            String?
+  createAt          DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  smsToken          smsToken[]
+  product           Product[]
+  chat_rooms        ChatRoom[]     @relation("UserChatRooms") // 사용자가 속한 채팅방
+  deletedByUser     ChatRoom[]     @relation("DeletedChatRooms") // 사용자가 삭제한 채팅방
+  messages          Message[]
+  like              Like[]
+  Home              Home[]
+  Saved             Saved[]
+  ChatHomeRoom      ChatHomeRoom[] @relation("UserChatHomeRooms")
+  deleteHomedByUser ChatHomeRoom[] @relation("DeletedChatHomeRooms")
+  HomeMessage       HomeMessage[]
 }
 
 model smsToken {
@@ -54,10 +58,11 @@ model Product {
   userId      Int
   ChatRooms   ChatRoom[]
   like        Like[]
+  Saved       Saved[]
 }
 
 model Home {
-  id            Int        @id @default(autoincrement())
+  id            Int            @id @default(autoincrement())
   title         String
   price         Float
   photos        String[]
@@ -65,12 +70,26 @@ model Home {
   contractStart DateTime?
   contractEnd   DateTime?
   location      String
-  created_At    DateTime   @default(now())
-  updated_At    DateTime   @updatedAt
-  user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  created_At    DateTime       @default(now())
+  updated_At    DateTime       @updatedAt
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        Int
-  ChatRooms     ChatRoom[]
-  like          Like[]
+  ChatHomeRooms ChatHomeRoom[]
+  saved         Saved[]
+  Like          Like[]
+}
+
+model ChatHomeRoom {
+  id                  String        @id @default(cuid())
+  users               User[]        @relation("UserChatHomeRooms")
+  homeId              Int
+  home                Home          @relation(fields: [homeId], references: [id], onDelete: Cascade)
+  created_At          DateTime      @default(now())
+  updated_At          DateTime      @updatedAt
+  messages            Message[]
+  deletedHomeByUserId Int?
+  deleteHomedByUser   User?         @relation("DeletedChatHomeRooms", fields: [deletedHomeByUserId], references: [id]) // 올바른 필드 이름 사용
+  HomeMessage         HomeMessage[]
 }
 
 model ChatRoom {
@@ -81,21 +100,32 @@ model ChatRoom {
   created_At      DateTime  @default(now())
   updated_At      DateTime  @updatedAt
   messages        Message[]
-  deletedByUserId Int? 
+  deletedByUserId Int?
   deletedByUser   User?     @relation("DeletedChatRooms", fields: [deletedByUserId], references: [id])
-  Home            Home?     @relation(fields: [homeId], references: [id])
-  homeId          Int?
+}
+
+model HomeMessage {
+  id         Int          @id @default(autoincrement())
+  payload    String
+  room       ChatHomeRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int
+  chatRoomId String
+  created_At DateTime     @default(now())
+  updated_At DateTime     @updatedAt
 }
 
 model Message {
-  id         Int      @id @default(autoincrement())
-  payload    String
-  room       ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     Int
-  chatRoomId String
-  created_At DateTime @default(now())
-  updated_At DateTime @updatedAt
+  id             Int           @id @default(autoincrement())
+  payload        String
+  room           ChatRoom      @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         Int
+  chatRoomId     String
+  created_At     DateTime      @default(now())
+  updated_At     DateTime      @updatedAt
+  ChatHomeRoom   ChatHomeRoom? @relation(fields: [chatHomeRoomId], references: [id])
+  chatHomeRoomId String?
 }
 
 model Like {
@@ -110,4 +140,18 @@ model Like {
   homeId    Int?
 
   @@id(name: "id", [userId, productId])
+}
+
+model Saved {
+  created_At DateTime @default(now())
+  updated_At DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  home      Home     @relation(fields: [homeId], references: [id], onDelete: Cascade)
+  homeId    Int
+  Product   Product? @relation(fields: [productId], references: [id])
+  productId Int?
+
+  @@id(name: "id", [userId, homeId])
 }

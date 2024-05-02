@@ -14,4 +14,16 @@ export async function getIsLiked(productId: number) {
     return Boolean(like);
   }
 
-  
+export async function getIsHomeSaved(homeId: number){
+  const session = await getSession();
+  const saved = await db.saved.findUnique({
+    where: {
+      id: {
+        homeId,
+        userId: session.id!,
+      },
+    },
+  });
+  return Boolean(saved);
+
+}

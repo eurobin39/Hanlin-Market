@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "ChatRoom" ALTER COLUMN "productId" DROP NOT NULL,
+ALTER COLUMN "homeId" DROP NOT NULL;

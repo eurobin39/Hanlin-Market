@@ -6,7 +6,7 @@ import db from "@/lib/db";
 import getSession from "@/lib/session";
 import { Prisma } from "@prisma/client";
 import { notFound } from "next/navigation";
-import deleteChatRoomAction from "./chatRoomDelete.actions";
+import deleteChatRoomAction from "../chatRoomDelete.actions";
 
 async function getRoom(id: string) {
   const session = await getSession();

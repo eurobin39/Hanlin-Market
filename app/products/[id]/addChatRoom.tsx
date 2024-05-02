@@ -39,19 +39,29 @@ export default async function createOrJoinChatRoom(productId: number): Promise<s
   });
 
   if (existingRoom) {
-    return `/chats/${existingRoom.id}`;
+    return `/chats/${existingRoom.id}/products-chat`;
   }
 
   // 새 채팅방 생성 시 구매자와 판매자 모두를 사용자로 연결합니다.
   const newRoom = await db.chatRoom.create({
     data: {
-      productId: productId,
-      users: {
-        connect: [{ id: buyerId }, { id: sellerId }], // 구매자와 판매자 모두 연결
+      product: {
+        connect: {
+          id: productId
+        }
       },
+      users: {
+        connect: [
+          { id: buyerId }, 
+          { id: sellerId }
+        ]
+      }
     },
-    select: { id: true },
+    select: {
+      id: true
+    }
   });
+  
 
-  return `/chats/${newRoom.id}`;
+  return `/chats/${newRoom.id}/products-chat`;
 }

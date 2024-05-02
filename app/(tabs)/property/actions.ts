@@ -10,9 +10,12 @@ export async function getMoreProperties(page: number) {
             price: true,
             photos: true,
             created_At: true,
+            location: true,
+            contractEnd: true,
+            contractStart: true,
             _count: {
                 select: {
-                    like: true,
+                    saved: true,
                 }
             }
         },

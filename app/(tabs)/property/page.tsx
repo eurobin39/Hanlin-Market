@@ -12,12 +12,14 @@ export async function getInitialProperties() {
         select: {
             title: true,
             price: true,
-            created_At: true,
+            contractEnd: true,
+            contractStart: true,
+            location: true,
             photos: true,
             id: true,
             _count: {
                 select: {
-                    like: true,
+                    saved: true,
                 }
             }
         },

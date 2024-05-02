@@ -1,6 +1,6 @@
 import React from "react";
 import ChatListProduct from "./chat-List-Products";
-import { InitialchatProducts } from "@/app/(tabs)/chats/page";
+import { InitialchatProducts } from "@/app/(tabs)/chats/product-chat/page";
 
 
 interface ProductListProps {
@@ -33,4 +33,3 @@ export default function ChatProductList({ initialChatProducts }: ProductListProp
     </div>
   );
 }
-
