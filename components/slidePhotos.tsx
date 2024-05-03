@@ -15,11 +15,6 @@ export default function ClientOnlySwiper({ photos }: ClientOnlySwiperProps) {
     .swiper-button-next, .swiper-button-prev {
       color: white;
     }
-    .swiper-button-next::after, .swiper-button-prev::after {
-      padding: 2px;
-      background: rgba(0, 0, 0, 0.5);
-      border-radius: 50%;
-    }
   `;
 
     return (

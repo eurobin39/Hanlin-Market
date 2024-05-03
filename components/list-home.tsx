@@ -11,6 +11,7 @@ interface ListPropertiesProps {
     contractStart: Date | null;
     location: string;
     photos: string[];
+    status: string;
     id: number;
     _count: {
         saved: number;
@@ -18,12 +19,12 @@ interface ListPropertiesProps {
 }
 
 export default function ListProperties({
-    title, price, location, contractEnd, contractStart, photos, id, _count
+    title, price, location, contractEnd, contractStart, photos, id, _count, status
 }: ListPropertiesProps) {
 
     let imageUrl = photos?.length > 0 ? photos[0] : '/default-image.png';
 
-    const formatDate = (date: Date) => date.toISOString().split('T')[0];
+    const displayStatus = status === "ACTIVE" ? "On Sale" : status;
 
     return (
         <div className="p-4 bg-gray-800 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 relative">
@@ -47,6 +48,10 @@ export default function ListProperties({
                 </div>
 
             </Link>
+            <div className="absolute bottom-16 right-6 flex items-center space-x-2">
+                
+                <span className="text-white font-semibold">{displayStatus}</span>
+            </div>
 
             <div className="absolute bottom-6 right-6 flex items-center space-x-2">
                 <BookmarkIcon className="h-6 w-6 text-red-500" />

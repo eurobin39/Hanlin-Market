@@ -15,6 +15,7 @@ export async function getInitialProducts() {
             price: true,
             created_At: true,
             photo: true,
+            status: true,
             id: true,
             _count: {
                 select: {

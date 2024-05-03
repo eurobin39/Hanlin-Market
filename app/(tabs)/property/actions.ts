@@ -11,6 +11,7 @@ export async function getMoreProperties(page: number) {
             photos: true,
             created_At: true,
             location: true,
+            status: true,
             contractEnd: true,
             contractStart: true,
             _count: {

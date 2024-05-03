@@ -14,6 +14,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Status {
+  ACTIVE    
+  COMPLETED
+  RESERVED
+}
+
 model User {
   id                Int            @id @default(autoincrement())
   username          String         @unique
@@ -36,6 +42,7 @@ model User {
   deleteHomedByUser ChatHomeRoom[] @relation("DeletedChatHomeRooms")
   HomeMessage       HomeMessage[]
   UserMessage       UserMessage[]
+  reputationScore   Int            @default(70)
 }
 
 model smsToken {
@@ -60,6 +67,7 @@ model Product {
   ChatRooms   ChatRoom[]
   like        Like[]
   Saved       Saved[]
+  status      Status     @default(ACTIVE)
 }
 
 model Home {
@@ -78,6 +86,7 @@ model Home {
   ChatHomeRooms ChatHomeRoom[]
   saved         Saved[]
   Like          Like[]
+  status        Status          @default(ACTIVE)
 }
 
 model ChatHomeRoom {
@@ -108,7 +117,7 @@ model ChatRoom {
 
 model RoomUserState {
   chatRoom   ChatRoom  @relation(fields: [chatRoomId], references: [id])
-  chatRoomId String    
+  chatRoomId String
   userId     Int
   lastReadAt DateTime? @default(now())
 
@@ -181,3 +190,5 @@ model Saved {
 
   @@id(name: "id", [userId, homeId])
 }
+
+

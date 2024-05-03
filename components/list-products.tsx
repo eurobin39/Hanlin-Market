@@ -9,16 +9,18 @@ interface ListProductsProps {
     created_At: Date;
     photo: string;
     id: number;
+    status: string;
     _count: {
         like: number;
     }
 }
 
 export default function ListProduct({
-    title, price, created_At, photo, id, _count
+    title, price, created_At, photo, id, _count, status
 }: ListProductsProps) {
 
-    
+    const displayStatus = status === "ACTIVE" ? "On Sale" : status;
+
     return (
         <div className="p-4 bg-gray-800 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 relative">
 
@@ -38,10 +40,13 @@ export default function ListProduct({
                 </div>
             </Link>
 
-            
+            <div className="absolute bottom-16 right-6 flex items-center space-x-2">
+                <span className="text-white font-semibold">{displayStatus}</span>
+            </div>
+
             <div className="absolute bottom-6 right-6 flex items-center space-x-2">
                 <HeartIcon className="h-6 w-6 text-red-500" />
-                <span className="text-white">{_count.like}</span>
+                <span className="text-white font-semibold">{_count.like}</span>
             </div>
         </div>
     )

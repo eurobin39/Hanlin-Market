@@ -143,7 +143,7 @@ export default async function propertyDetail({ params
 
       <div className="p-5 mb-16">
         <h1 className="text-2xl font-semibold pb-3">{property.title}</h1>
-        <p className="relative p-5 border-2 border-neutral-600 rounded-md w-full auto">
+        <p className="relative p-5 border-2 border-neutral-600 rounded-md w-full auto whitespace-pre-wrap">
           {property.description}
         </p>
       </div>

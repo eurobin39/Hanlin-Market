@@ -9,6 +9,7 @@ export async function getMoreProducts(page: number) {
             title: true,
             price: true,
             photo: true,
+            status: true,
             created_At: true,
             _count: {
                 select: {

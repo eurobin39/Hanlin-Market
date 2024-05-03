@@ -16,6 +16,7 @@ export async function getInitialProperties() {
             contractStart: true,
             location: true,
             photos: true,
+            status: true,
             id: true,
             _count: {
                 select: {
