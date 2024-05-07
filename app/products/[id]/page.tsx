@@ -12,6 +12,7 @@ import ProductDeleteButton from "./delete.button";
 import AddChatButton from "./addChatButton";
 import { revalidatePath } from "next/cache";
 import { getIsLiked } from "@/components/like-Dislike";
+import ProductPage from "./popup";
 
 
 export async function getIsOwner(userId: number) {
@@ -25,7 +26,19 @@ async function getProduct(id: number) {
     where: {
       id,
     },
-    include: {
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      photo: true,
+      userId: true,
+      price: true,
+      status: true,
+      Category: {
+        select: {
+          name: true,
+        }
+      },
       user: {
         select: {
           username: true,
@@ -88,10 +101,16 @@ export default async function productDetail({ params
       revalidatePath(`/products/${id}`);
     } catch (e) { }
   };
+
   const isLiked = await getIsLiked(id);
 
 
+  const isCompleted = product.status === "COMPLETED";
+
+
   return (
+
+
 
     <div>
 
@@ -134,7 +153,10 @@ export default async function productDetail({ params
       </div>
 
       <div className="p-5 mb-16">
-        <h1 className="text-2xl font-semibold pb-3">{product.title}</h1>
+        <h1 className="text-2xl font-semibold pb-2">{product.title}</h1>
+        <h2 className="text-sm text-gray-500 bg-white bg-opacity-80 py-1 px-2 rounded inline-block mb-1">
+          #{product.Category?.name}
+        </h2>
         <p className="relative p-5 border-2 border-neutral-600 rounded-md w-full auto">
           {product.description}
         </p>
@@ -142,8 +164,9 @@ export default async function productDetail({ params
       <div className="fixed mx-auto w-full max-w-screen-sm bottom-0 p-5 pb-5 bg-neutral-800 flex justify-between items-center">
         <span className="font-semibold text-lg">€{formatToWon(product.price)}</span>
         {isOwner ? <ProductDeleteButton productId={product.id} /> : null}
+        {isOwner ? <ProductPage productId={product.id} /> : null}
+        {isCompleted ? null : <AddChatButton productId={product.id} />}
 
-        <AddChatButton productId={product.id} />
 
       </div>
 

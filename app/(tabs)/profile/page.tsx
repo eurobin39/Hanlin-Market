@@ -1,7 +1,9 @@
+
 import getSession from "@/lib/session";
 import db from "@/lib/db";
-import { notFound, redirect } from "next/navigation";
+import { notFound,useRouter } from "next/navigation";
 import Image from "next/image";
+import logout from "./action";
 
 
 
@@ -27,11 +29,8 @@ export async function getUser() {
 
 export default async function Profile() {
     const user = await getUser();
-    const logout = async () => {
-        "use server";
-        const session = await getSession();
-        await session.destroy();
-        redirect("/");
+    const logoutFunction = async () => {
+        logout();
     }
     const scorePercentage = (user.reputationScore / 100) * 100;
 
@@ -63,7 +62,7 @@ export default async function Profile() {
                     </div>
                 </div>
             </div>
-            <button onClick={logout} className="mt-4 p-2 bg-red-500 text-white rounded hover:bg-red-600">
+            <button onClick={logoutFunction} className="mt-4 p-2 bg-red-500 text-white rounded hover:bg-red-600">
                 Log Out
             </button>
         </div>

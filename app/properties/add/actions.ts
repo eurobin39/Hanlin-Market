@@ -43,6 +43,7 @@ export async function uploadProperties(_: any, formData: FormData) {
     };
 
     const result = propertiesSchema.safeParse(data);
+    
     if (!result.success) {
         console.error(result.error);
         return result.error.flatten();

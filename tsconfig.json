@@ -32,7 +32,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-, "app/chats/select-room/properties-chat"  ],
+, "app/chats/select-room/properties-chat", "prisma/seed.mjs"  ],
   "exclude": [
     "node_modules"
   ]

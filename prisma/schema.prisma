@@ -15,9 +15,15 @@ datasource db {
 }
 
 enum Status {
-  ACTIVE    
+  ACTIVE
   COMPLETED
   RESERVED
+}
+
+model Category {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  products Product[]
 }
 
 model User {
@@ -68,6 +74,8 @@ model Product {
   like        Like[]
   Saved       Saved[]
   status      Status     @default(ACTIVE)
+  Category    Category   @relation(fields: [categoryId], references: [id])
+  categoryId  Int
 }
 
 model Home {
@@ -86,7 +94,7 @@ model Home {
   ChatHomeRooms ChatHomeRoom[]
   saved         Saved[]
   Like          Like[]
-  status        Status          @default(ACTIVE)
+  status        Status         @default(ACTIVE)
 }
 
 model ChatHomeRoom {
@@ -190,5 +198,3 @@ model Saved {
 
   @@id(name: "id", [userId, homeId])
 }
-
-

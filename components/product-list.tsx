@@ -51,7 +51,7 @@ export default function ProductList({ initialProducts }: ProductListProps) {
     
     return (
         
-        <div className="py-20">
+        <div className="">
             <div className="p-2 flex flex-col gap-5">
                 {products.map((product) => (<ListProduct key={product.id}
                     {...product} />))}

@@ -15,8 +15,8 @@ interface ListProductsProps {
     }
 }
 
-export default function ListProduct({
-    title, price, created_At, photo, id, _count, status
+export default function CategoryListProduct({
+    title, price, created_At, photo, id, status, _count
 }: ListProductsProps) {
 
     let displayStatus;
@@ -88,3 +88,5 @@ export default function ListProduct({
         </div>
     );
 }
+
+//

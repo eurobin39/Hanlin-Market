@@ -1,17 +1,21 @@
 "use server"
 
 import db from "@/lib/db";
+import { Prisma } from "@prisma/client";
 
-export async function getMoreProducts(page: number) {
-    const products = await db.product.findMany({
+export async function getMoreCategoryProducts(page: number, categoryId?: number) {
+    const categoryProducts = db.product.findMany({
+        where: {
+            categoryId: categoryId,
+        },
         select: {
-            id: true,
             title: true,
             price: true,
+            created_At: true,
             photo: true,
             status: true,
             categoryId: true,
-            created_At: true,
+            id: true,
             _count: {
                 select: {
                     like: true,
@@ -24,5 +28,6 @@ export async function getMoreProducts(page: number) {
             created_At: "desc",
         }
     });
-    return products;
+    return categoryProducts;
 }
+     

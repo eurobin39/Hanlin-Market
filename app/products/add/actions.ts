@@ -20,24 +20,20 @@ const productSchema = z.object({
     price: z.coerce.number({
         required_error: "price is Required"
     }),
+    categoryId: z.coerce.number({
+        required_error: "category is Required"
+    })
 })
 export async function uploadProduct(_: any, formData: FormData) {
     const data = {
-        photo: formData.get("photo"),
-        title: formData.get("title"),
-        price: formData.get("price"),
-        description: formData.get("description"),
+        photo: formData.get("photo") as string || "Default IMG",
+        title: formData.get("title") as string || "Default Title",
+        price: Number(formData.get("price") || 0),
+        description: formData.get("description") as string || "No description provided",
+        categoryId: parseInt(formData.get("categoryId") as string)  // categoryId를 정수로 파싱
     };
 
-
-    /* 파일 비동기화 시 사용 코드(Global 파일에 저장)
-    if(data.photo instanceof File){
-        const photoData = await data.photo.arrayBuffer();
-        await fs.appendFile(`./public/${data.photo.name}`,Buffer.from(photoData));
-        data.photo = `/${data.photo.name}`
-    }
-    */
-
+    console.log(data);
 
     const result = productSchema.safeParse(data);
 
@@ -45,13 +41,35 @@ export async function uploadProduct(_: any, formData: FormData) {
         return result.error.flatten();
     } else {
         const session = await getSession();
-        if (session.id) {
+        if (!session || !session.id) {
+            throw new Error("Unauthorized: No active session found.");
+        }
+
+        // 카테고리 존재 여부 확인
+        const categoryExists = await db.category.findUnique({
+            where: {
+                id: data.categoryId
+            }
+        });
+
+        if (!categoryExists) {
+            throw new Error(`No Category found with ID: ${data.categoryId}`);
+        }
+
+
+        // 제품 생성
+        try {
             const product = await db.product.create({
                 data: {
-                    title: result.data.title,
-                    description: result.data.description,
-                    price: result.data.price,
-                    photo: result.data.photo,
+                    title: data.title,
+                    description: data.description,
+                    price: data.price,
+                    photo: data.photo,
+                    Category: {
+                        connect: {
+                            id: data.categoryId
+                        }
+                    },
                     user: {
                         connect: {
                             id: session.id
@@ -63,22 +81,29 @@ export async function uploadProduct(_: any, formData: FormData) {
                 }
             });
             redirect(`/products/${product.id}`)
-            //redirect("/products")
+        } catch (error) {
+            console.error("Database error: ", error);
+            throw error;
         }
     }
-    //console.log(data);
 }
 
-export async function getUploadUrl() {
-    const response = await fetch(`https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/images/v2/direct_upload`
-        , {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${process.env.CLOUDFLARE_API_KEY}`,
+
+    export async function getUploadUrl() {
+        const response = await fetch(`https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/images/v2/direct_upload`
+            , {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${process.env.CLOUDFLARE_API_KEY}`,
+                }
             }
-        }
-    );
-    const data = await response.json();
-    return data;
+        );
+        const data = await response.json();
+        return data;
 
-}
+    }
+
+    export async function getCategories() {
+        const categories = db.category.findMany();
+        return categories;
+    }
