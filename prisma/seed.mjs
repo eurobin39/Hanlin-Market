@@ -13,6 +13,16 @@ async function main() {
     data: categories.map(name => ({ name })),
     skipDuplicates: true // 중복된 데이터는 건너뜁니다.
   });
+
+  const postCategories = [
+    "질문", "운동", "모임", "맛집", "생활"
+  ]
+   
+
+  await prisma.postCategory.createMany({
+    data: postCategories.map(name => ({ name })),
+    skipDuplicates: true // 중복된 데이터는 건너뜁니다.
+  });
 }
 
 main().catch((e) => {

@@ -52,7 +52,7 @@ export default function ProductList({ initialProducts }: ProductListProps) {
     return (
         
         <div className="">
-            <div className="p-2 flex flex-col gap-5">
+            <div className="p-2 flex flex-col gap-2">
                 {products.map((product) => (<ListProduct key={product.id}
                     {...product} />))}
                     {!isLastPage ? ( <span

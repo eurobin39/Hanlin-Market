@@ -16,7 +16,7 @@ async function deleteURL(imageId: string) {
 }
 
 // 상품을 삭제하는 함수
-export default async function deleteProductAction(productId: number) {
+export default async function deleteProductAction(homeId: number) {
     const session = await getSession();
     const userId = session.id;
 
@@ -25,19 +25,19 @@ export default async function deleteProductAction(productId: number) {
     }
 
     // 먼저 상품 정보를 조회합니다.
-    const product = await db.product.findUnique({
+    const home = await db.home.findUnique({
         where: {
-            id: productId,
+            id: homeId,
             userId,
         },
     });
 
-    if (!product) {
+    if (!home) {
         return false;
     }
 
     // 상품의 photo URL에서 imageId를 추출합니다.
-    const imageIdMatch = product.photo.match(/imagedelivery\.net\/[^\/]+\/([^\/]+)/);
+    const imageIdMatch = home.photos[0].match(/imagedelivery\.net\/[^\/]+\/([^\/]+)/);
     if (!imageIdMatch) {
         console.error('Failed to extract imageId from photo URL');
         return false;
@@ -48,9 +48,9 @@ export default async function deleteProductAction(productId: number) {
     await deleteURL(imageId);
 
     // 데이터베이스에서 상품을 삭제합니다.
-    await db.product.delete({
+    await db.home.delete({
         where: {
-            id: productId,
+            id: homeId,
             userId,
         },
     });

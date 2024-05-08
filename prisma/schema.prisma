@@ -26,6 +26,12 @@ model Category {
   products Product[]
 }
 
+model PostCategory {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  post Post[]
+}
+
 model User {
   id                Int            @id @default(autoincrement())
   username          String         @unique
@@ -49,6 +55,9 @@ model User {
   HomeMessage       HomeMessage[]
   UserMessage       UserMessage[]
   reputationScore   Int            @default(70)
+  Post              Post[]
+  Comment           Comment[]
+  postLike          PostLike[]
 }
 
 model smsToken {
@@ -70,7 +79,7 @@ model Product {
   updated_At  DateTime   @updatedAt
   user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      Int
-  ChatRooms   ChatRoom[]
+  ChatRooms   ChatRoom[] 
   like        Like[]
   Saved       Saved[]
   status      Status     @default(ACTIVE)
@@ -93,7 +102,6 @@ model Home {
   userId        Int
   ChatHomeRooms ChatHomeRoom[]
   saved         Saved[]
-  Like          Like[]
   status        Status         @default(ACTIVE)
 }
 
@@ -168,10 +176,50 @@ model Like {
   userId    Int
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
-  Home      Home?   @relation(fields: [homeId], references: [id])
-  homeId    Int?
 
   @@id(name: "id", [userId, productId])
+}
+
+model PostLike {
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId Int
+  postId Int
+
+  @@id(name: "id", [userId, postId])
+}
+
+model Post {
+  id          Int     @id @default(autoincrement())
+  title       String
+  description String?
+  views       Int     @default(0)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         Int
+  comments       Comment[]
+  likes          PostLike[]
+  PostCategory   PostCategory @relation(fields: [postCategoryId], references: [id])
+  postCategoryId Int
+}
+
+model Comment {
+  id      Int    @id @default(autoincrement())
+  payload String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId Int
+  postId Int
 }
 
 model UserMessage {

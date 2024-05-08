@@ -34,6 +34,7 @@ async function getProduct(id: number) {
       userId: true,
       price: true,
       status: true,
+      ChatRooms: true,
       Category: {
         select: {
           name: true,

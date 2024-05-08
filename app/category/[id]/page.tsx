@@ -54,7 +54,7 @@ export default async function Products({ params
     console.log(initialCategoryProducts);
 
     return (
-        <div>
+        <div className="mb-20">
             <div className="mt-20 z-auto">
                 <CategoryList/>
             </div>

@@ -22,8 +22,8 @@ export async function getMoreCategoryProducts(page: number, categoryId?: number)
                 }
             }
         },
-        skip: page * 1, // 이 부분도 수정하면 좋을 듯, page * 1 보다는 명시적으로 아이템 수를 곱해야 합니다.
-        take: 1,
+        skip: page * 5, // 이 부분도 수정하면 좋을 듯, page * 1 보다는 명시적으로 아이템 수를 곱해야 합니다.
+        take: 5,
         orderBy: {
             created_At: "desc",
         }
