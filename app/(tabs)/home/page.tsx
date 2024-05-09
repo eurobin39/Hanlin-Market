@@ -65,7 +65,7 @@ export default async function Products() {
             <div className="fixed bottom-32 w-full mx-auto max-w-screen-sm flex items-center
              justify-centerpx-5 py-">
                 <Link href="/products/add" className="bg-emerald-500 flex items-center justify-center
-            rounded-full size-16 absolute right-12 text-white transition-colors hover:bg-emerald-400 ">
+            rounded-full size-12 absolute right-12 text-white transition-colors hover:bg-emerald-400 ">
                     <PlusIcon className="size-10" />
                 </Link>
             </div>
