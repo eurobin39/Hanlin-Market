@@ -12,9 +12,8 @@ import { Bars3Icon } from "@heroicons/react/24/solid"
 import { usePathname } from "next/navigation"
 import { ShoppingBagIcon as ShopOutline } from "@heroicons/react/24/outline"
 import { ShoppingBagIcon as ShopSolid } from "@heroicons/react/24/solid"
-import SearchBar from "./SearchBar"
 
-export default function TabBar() {
+export default function TabOriginal() {
     const pathname = usePathname();
     return (
         <div className="*:bg-gray-900">
@@ -23,7 +22,7 @@ export default function TabBar() {
             border-t px-5 py-3">
                 <Link className="flex flex-col  items-center gap-px" href="/home">
                     {pathname === "/home" ? (
-                        <ShopSolid className="w-7 h-7" />
+                        <ShopSolid className="w-7 h-7"/>
                     ) : (<ShopOutline className="w-7 h-7" />)}
                     <span>PRODUCT</span>
                 </Link>
@@ -53,25 +52,19 @@ export default function TabBar() {
                     <span>PROFILE</span>
                 </Link>
             </div>
-
+            
             <div className="fixed top-0 w-full mx-auto max-w-screen-sm flex items-center
-              border-t border-b border-neutral-600 px-5 py-3 ">
-
+             justify-center border-t border-b border-neutral-600 px-5 py-3 ">
+                
                 <div className="absolute left-5" style={{ width: '24px', height: '24px' }}></div>
                 <Link className="text-4xl font-bold" href="/home">
                     <span>HANLIN</span>
                 </Link>
-           
-
-            </div>
-
+            </div> 
+          
 
         </div>
 
 
     )
 }
-
-/*<Link className="absolute right-5" href="/profile">
-                    <Bars3Icon className="w-7 h-7" />
-                </Link> */

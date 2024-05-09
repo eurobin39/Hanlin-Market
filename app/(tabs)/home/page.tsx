@@ -5,6 +5,7 @@ import { Prisma } from "@prisma/client";
 import Link from "next/link";
 import { PlusIcon } from "@heroicons/react/20/solid";
 import CategoryList from "@/components/categoryList";
+import SearchBar from "@/components/SearchBar";
 
 
 
@@ -41,10 +42,23 @@ export default async function Products() {
 
     //console.log(initialProducts);
     return (
-        <div className="mb-20">
-            <div className="mt-20 z-auto">
-                <CategoryList/>
+        <div className="mb-20 gap-1">
+
+            <div className="flex mt-16 z-auto w-full gap-64 h-8">
+                <div className="pt-2 w-32">
+                    <CategoryList />
+                </div>
+
+                <div className="fixed top-0 w-full mx-auto max-w-screen-sm flex items-center
+              px-5 py-3 z-50">
+                    <div className="absolute mt-4 pt-1 right-3">
+                        <SearchBar />
+                    </div>
+                </div>
             </div>
+
+
+
 
             <ProductList initialProducts={initialProducts} />
 

@@ -55,7 +55,7 @@ export default function PropertyList({ initialProperties }: PropertyListProps) {
     return (
 
         <div className="py-20">
-            <div className="p-2 flex flex-col gap-5">
+            <div className="p-2 flex flex-col gap-2">
                 {properties.map((properties) => (<ListProperties key={properties.id}
                     {...properties} />))}
                 {!isLastPage ? (<span

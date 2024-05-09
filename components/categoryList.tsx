@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getCategories } from "@/app/products/add/actions";
+import { BarsArrowDownIcon } from "@heroicons/react/20/solid";
 
 export default function CategoryList() {
     const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
@@ -33,9 +34,12 @@ export default function CategoryList() {
     return (
         <div>
             <form onSubmit={(event) => event.preventDefault()} className="flex flex-col gap-5">
-                <div onClick={() => setDropdownOpen(!dropdownOpen)} className="relative cursor-pointer border-2 border-neutral-300 text-neutral-400 rounded-md p-2">
-                    {selectedCategoryId ? categories.find(cat => cat.id.toString() === selectedCategoryId)?.name : "Select a category"}
-                    <div className={`${dropdownOpen ? "block" : "hidden"} absolute w-full text-neutral-100 bg-neutral-700 border-neutral-300 shadow-md mt-1 max-h-60 overflow-auto z-50`}>
+                <div onClick={() => setDropdownOpen(!dropdownOpen)} className="relative cursor-pointer border-2 border-neutral-800 text-neutral-400 rounded-md">
+                    <div className="flex justify-center pt-2">
+                        <BarsArrowDownIcon className="size-8"/>
+                        {selectedCategoryId ? categories.find(cat => cat.id.toString() === selectedCategoryId)?.name :  "카테고리"}
+                    </div>
+                    <div className={`${dropdownOpen ? "block" : "hidden"} absolute text-neutral-100 bg-neutral-700 border-neutral-300  shadow-md mt-1 max-h-60 overflow-auto z-50`}>
                         {categories.map((category) => (
                             <div key={category.id} onClick={(e) => {
                                 e.stopPropagation();  // Important to stop propagation here

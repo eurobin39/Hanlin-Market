@@ -1,3 +1,4 @@
+'use server'
 
 import getSession from "@/lib/session";
 import db from "@/lib/db";
@@ -75,9 +76,6 @@ export default async function Profile() {
         return "bg-red-500";
     };
 
-
-
-
     const gaugeClass = getGaugeColor(user.reputationScore);
 
     return (
@@ -100,9 +98,9 @@ export default async function Profile() {
                     </div>
                 </div>
                 <div className="flex flex-col gap-3">
-                    <button onClick={logOut} className="p-2 bg-blue-500 rounded hover:bg-blue-600">
+                    <Link href="/profile/edit"className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600">
                         프로필 수정
-                    </button>
+                    </Link>
                     <button onClick={logOut} className="p-2 bg-red-500 rounded hover:bg-red-600">
                         로그아웃
                     </button>
@@ -176,7 +174,7 @@ export default async function Profile() {
                         }
                         return (
                             <Link key={home.id} href={`/properties/${home.id}`}>
-                                <div className="block min-w-[200px] h-[260px] bg-gray-600 rounded-lg shadow overflow-hidden *:text-white relative">
+                                <div className="block min-w-[400px] h-[260px] bg-gray-600 rounded-lg shadow overflow-hidden *:text-white relative">
                                     <div className="flex justify-center items-center h-2/3 w-full overflow-hidden">
                                         <Image src={`${home.photos[0]}/public`} alt={home.title} layout="intrinsic" width={200} height={160} objectFit="contain" className="bg-white" />
                                     </div>

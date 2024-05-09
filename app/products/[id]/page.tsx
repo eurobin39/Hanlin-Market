@@ -44,6 +44,7 @@ async function getProduct(id: number) {
         select: {
           username: true,
           avatar: true,
+          reputationScore: true,
         },
       },
       _count: {
@@ -108,6 +109,17 @@ export default async function productDetail({ params
 
   const isCompleted = product.status === "COMPLETED";
 
+  const scorePercentage = (product.user.reputationScore / 100) * 100;
+
+  const getGaugeColor = (score: number) => {
+    if (score >= 90) return "bg-gradient-to-r from-purple-500 via-blue-500 to-red-500 animate-pulse";
+    if (score >= 70) return "bg-green-500";
+    if (score >= 50) return "bg-yellow-500";
+    if (score >= 30) return "bg-orange-500";
+    return "bg-red-500";
+  };
+
+  const gaugeClass = getGaugeColor(product.user.reputationScore);
 
   return (
 
@@ -138,6 +150,9 @@ export default async function productDetail({ params
           </div>
           <div>
             <h3>{product.user.username}</h3>
+            <div className="w-28 h-2 bg-gray-300 rounded-full overflow-hidden mt-1">
+              <div className={`h-full ${gaugeClass} rounded-l-full transition-all duration-300`} style={{ width: `${scorePercentage}%` }}></div>
+            </div>
           </div>
         </div>
 

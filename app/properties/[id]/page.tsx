@@ -14,6 +14,8 @@ import React from 'react';
 import ClientOnlySwiper from '@/components/slidePhotos';
 import AddChatButton from "./addChatButton";
 import PropertyDeleteButton from "./delete.button";
+import ProductPage from "@/app/products/[id]/popup";
+import PropertiesPage from "./popup";
 
 
 
@@ -35,6 +37,7 @@ async function getProperty(id: number) {
         select: {
           username: true,
           avatar: true,
+          reputationScore: true,
         },
       },
       _count: {
@@ -95,6 +98,21 @@ export default async function propertyDetail({ params
   };
   const isSaved = await getIsHomeSaved(id);
 
+  const isCompleted = property.status === "COMPLETED";
+
+
+  const scorePercentage = (property.user.reputationScore / 100) * 100;
+
+  const getGaugeColor = (score: number) => {
+    if (score >= 90) return "bg-gradient-to-r from-purple-500 via-blue-500 to-red-500 animate-pulse";
+    if (score >= 70) return "bg-green-500";
+    if (score >= 50) return "bg-yellow-500";
+    if (score >= 30) return "bg-orange-500";
+    return "bg-red-500";
+  };
+
+  const gaugeClass = getGaugeColor(property.user.reputationScore);
+
 
   return (
 
@@ -126,6 +144,9 @@ export default async function propertyDetail({ params
           </div>
           <div>
             <h3>{property.user.username}</h3>
+            <div className="w-28 h-2 bg-gray-300 rounded-full overflow-hidden mt-1">
+              <div className={`h-full ${gaugeClass} rounded-l-full transition-all duration-300`} style={{ width: `${scorePercentage}%` }}></div>
+            </div>
           </div>
         </div>
 
@@ -147,12 +168,12 @@ export default async function propertyDetail({ params
           {property.description}
         </p>
       </div>
-      <div className="fixed mx-auto w-full max-w-screen-sm bottom-0 p-5 pb-5 bg-neutral-800 flex justify-between items-center">
+      <div className="fixed mx-auto w-full max-w-screen-sm bottom-0 p-5 pb-5 z-50 bg-neutral-800 flex justify-between items-center">
         <span className="font-semibold text-lg">€{formatToWon(property.price)}</span>
         {isOwner ? <PropertyDeleteButton propertyId={property.id} /> : null}
-
-        <AddChatButton propertyId={property.id} />
-
+        {isOwner ? <PropertiesPage productId={property.id} /> : null}
+        {isCompleted ? null : <AddChatButton propertyId={property.id} />}
+      
 
 
       </div>
