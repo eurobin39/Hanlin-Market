@@ -11,7 +11,7 @@ export default function Home() {
       </div>
      <div className="flex flex-col items-center gap-3 w-full">
        <Link href="/create-account"
-        className="primary-btn py-2 h-15">LET'S START</Link> 
+        className="primary-btn py-2 h-15">JOIN</Link> 
         <div>
          <span className="p-2">Already had an account?</span>
          <Link href="/login" className="hover:underline underline-offset-2">Login</Link>
@@ -19,7 +19,6 @@ export default function Home() {
       </div>
     </div>
   )
-  
   
 }
     

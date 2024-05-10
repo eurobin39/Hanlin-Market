@@ -53,6 +53,8 @@ export default function AddMultipleProducts() {
         </button>
     ));
 
+    CustomInput.displayName = "CustomInput"; 
+
     const handleUpload = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);  // Start loading before the operation
